@@ -1,0 +1,57 @@
+<head>
+    <title>Account Manager</title>
+	<script src='/static/js/jquery-3.3.1.js'></script>
+	<script src='/static/js/updatever.js'></script>
+</head>
+<body onload="updatever()">
+	<div id="Version-nav">
+        <div id="Version-label" style="width:45%;float:left;">
+            {% if language=="zh" %}
+            &emsp;&emsp;版本
+            {% else %}
+            &emsp;&emsp;Version
+            {% endif %}
+		</div>
+		<div id="Version-choice" style="width:45%;float:left;">
+			<span id="ver"></span>
+		</div>
+	</div>
+	<br><br>
+	<div id="language-nav">
+        <div id="language-label" style="width:45%;float:left;">
+            {% if language=="zh" %}
+            &emsp;&emsp;语言
+            {% else %}
+            &emsp;&emsp;Language
+            {% endif %}
+		</div>
+        <div id="language-choice" style="width:45%;float:left;">
+            {% if position=="search" %}
+            <a href="{{ get_urls('search') }}"><button>English</button></a>&emsp;&emsp;<a href="{{ get_urls('search_zh') }}"><button> 简体中文</button></a>
+            {% elif position == "update" %}
+            <a href="{{ get_urls('update') }}"><button>English</button></a>&emsp;&emsp;<a href="{{ get_urls('update_zh') }}"><button> 简体中文</button></a>
+            {% else %}
+            <a href="{{ get_urls('index') }}"><button>English</button></a>&emsp;&emsp;<a href="{{ get_urls('index_zh') }}"><button> 简体中文</button></a>
+            {% endif %}
+		</div>
+	</div>
+	<br><br>
+	<div id="function-nav" >
+        <div id="function-label" style="width:45%;float:left;">
+            {% if language=="zh" %}
+            &emsp;&emsp;功能
+            {% else %}
+            &emsp;&emsp;Function
+            {% endif %}
+        </div>
+        {% if language=="zh" %}
+        <div id="function-choice" style="width:45%;float:left;">
+			<a href="{{ get_urls('index_zh') }}"><button>生成器</button></a>&emsp;&emsp;<a href="{{get_urls('search_zh')}}"><button>搜索</button></a>&emsp;&emsp;<a href="{{get_urls('update_zh')}}"><button>更新标注</button></a>
+        </div>
+        {% else %}
+		<div id="function-choice" style="width:45%;float:left;">
+			<a href="{{ get_urls('index') }}"><button>Generation</button></a>&emsp;&emsp;<a href="{{get_urls('search')}}"><button>Search</button></a>&emsp;&emsp;<a href="{{get_urls('update')}}"><button>Update Text</button></a>
+        </div>
+        {% endif %}
+	</div>
+	<br><br>
