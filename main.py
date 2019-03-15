@@ -1,6 +1,6 @@
 from flask import Flask,request,url_for,render_template ,Response
-import os,urllib.parse ,sys
-import globals
+import os,urllib.parse ,sys 
+import globals , encrypt
 app = Flask(__name__)
 
 @app.route("/")
@@ -23,6 +23,27 @@ def update():
         return render_template("update.html",language="zh",position="update")
     else:
         return render_template("update.html",position="update")
+
+@app.route("/getAccount/")
+def getAccount():
+    try:
+        return encrypt.getAccount()
+    except:
+        return "500 Application Error",500
+
+@app.route("/getPD/<pdmode>")
+def getPD(pdmode):
+    try:
+        if pdmode == "1" :
+            return encrypt.getPassword_1()
+        elif pdmode == "2" :
+            return encrypt.getPassword_2()
+        elif pdmode == "3" :
+            return encrypt.getPassword_3()
+        elif pdmode == "4" :
+            return encrypt.getPassword_max()
+    except:
+        return "500 Application Error",500
 
 @app.route("/static/js/<filename>")
 def jsfile(filename):
@@ -60,6 +81,8 @@ def imgfile(filename):
                     yield data
         return Response(getfiledata(),mimetype="application/octet-stream",headers={"Content-Type":"application/octet-stream"})
 
+
+
 def get_urls(varname):
     if varname in globals.urls:
         return globals.urls[varname]
@@ -68,9 +91,9 @@ app.add_template_global(get_urls,"get_urls")
 
 
 if __name__ == "__main__":
-    if len(sys.argv) > 1:
+    if len(sys.argv) > 2:
         app.run(sys.argv[0],port=sys.argv[1])
-    elif len(sys.argv) > 0:
+    elif len(sys.argv) > 1:
         app.run(sys.argv[0])
     else:
         app.debug = True
