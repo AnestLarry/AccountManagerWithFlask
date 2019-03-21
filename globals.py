@@ -10,4 +10,6 @@ urls = {'index': '/',
 "getPD2":"/getPD/2",
 "getPD3":"/getPD/3",
 "getPD4":"/getPD/4",
-"Save_Result_to_sql":"/Save_Result_to_sql",}
+"Save_Result_to_sql":"/Save_Result_to_sql",
+"Search_item":"/Search_item",
+}

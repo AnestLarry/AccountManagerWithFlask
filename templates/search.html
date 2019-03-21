@@ -21,9 +21,12 @@
 				})
 			})
 		function Searched_Item(key,keyword){
-			$.get("/searched/"+key+"/"+keyword ,function(data){
+		$.post("{{ get_urls('Search_item') }}",{
+				key:key,
+				keyword:keyword
+			},function(data){
 				document.getElementById('Searched').innerHTML = data;
-			})	
+			})
 		}
 		</script>
 		<hr>

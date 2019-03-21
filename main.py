@@ -60,7 +60,29 @@ def Save_Result_to_sql():
             AccountStr,Password =base64.b64encode(request.form['password'].encode()).decode() , base64.b64encode(request.form['password'].encode()).decode()
             sql=pjsql.manage_sql()
             sql.Save_Result_to_sql(AddressStr,AccountStr,Password,Text)
+            del sql
             return "Succ",200
+    except:
+        return "400 Bad Request",400
+
+@app.route("/Search_item",methods=["POST"])
+def Search_item():
+    try:
+        if request.form['key'] and request.form["keyword"]:
+            keyword = base64.b64encode(request.form["keyword"].encode()).decode()
+            key=request.form['key']
+            if key == "0":
+                KeyMode_Str='Address'
+            elif key == "1":
+                KeyMode_Str='Account'
+            elif key == "2":
+                KeyMode_Str='Password'
+            else:
+                return "400 Bad Request",400
+            sql=pjsql.manage_sql()
+            result=sql.Search_Item(KeyMode_Str,keyword)
+            del sql
+            return result,200
     except:
         return "400 Bad Request",400
 
