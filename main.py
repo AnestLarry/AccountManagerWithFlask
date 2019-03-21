@@ -1,6 +1,6 @@
 from flask import Flask,request,url_for,render_template ,Response
-import os,urllib.parse ,sys 
-import globals , encrypt
+import os,urllib.parse ,sys ,base64
+import globals , encrypt ,pjsql
 app = Flask(__name__)
 
 @app.route("/")
@@ -44,6 +44,25 @@ def getPD(pdmode):
             return encrypt.getPassword_max()
     except:
         return "500 Application Error",500
+
+@app.route("/Save_Result_to_sql",methods=["POST"])
+def Save_Result_to_sql():
+    try:
+        if request.form['password'] and request.form["AccountStr"]:
+            try:
+                AddressStr =base64.b64encode(request.form["AddressStr"].encode()).decode()
+            except:
+                AddressStr = "Tm9BZGRyZXNz" #NoAddress
+            try:
+                Text=base64.b64encode(request.form["Text"].decode()).decode()
+            except:
+                Text="Tm9WYWx1ZQ==" # NoValue
+            AccountStr,Password =base64.b64encode(request.form['password'].encode()).decode() , base64.b64encode(request.form['password'].encode()).decode()
+            sql=pjsql.manage_sql()
+            sql.Save_Result_to_sql(AddressStr,AccountStr,Password,Text)
+            return "Succ",200
+    except:
+        return "400 Bad Request",400
 
 @app.route("/static/js/<filename>")
 def jsfile(filename):
