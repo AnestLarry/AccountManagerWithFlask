@@ -6,14 +6,17 @@
 					Update_Item( $("#Update_Date").val() , $("#Update_Text").val())
 				})
 			})
-		function Update_Item(key,keyword){
-			$.get("/Update_Text/"+key+"/"+keyword ,function(){
+		function Update_Item(Date,Text){
+			$.post("{{ get_urls('Update_Text') }}",{
+				DateStr:Date,
+				TextStr:Text
+			},function(data){
 				{% if language=="zh" %}
-					alert("成功");
-					{% else %}
-					alert("succ");
-					{% endif %}
-			})	
+				alert("成功");
+				{% else %}
+				alert("succ");
+				{% endif %}
+			})
 		}
 		</script>
 	<hr>

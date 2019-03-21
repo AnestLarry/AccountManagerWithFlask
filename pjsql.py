@@ -34,3 +34,20 @@ class manage_sql:
         result_Str+='</font>'
         del c,conn
         return result_Str
+    def Update_Text(self,DateStr,TextStr):
+        #log.info(request.META['REMOTE_ADDR']+" DateStr{ "+DateStr+" } TextStr { "+TextStr+" }")
+        conn = sqlite3.connect('Database.db')
+        c = conn.cursor()
+        c.execute('update Data set Text="'+TextStr+'" where Date="'+DateStr +'";')
+        conn.commit()
+        del c,conn
+        return True
+    
+    def Delete_Item(self,keywordStr):
+        #log.warning(request.META['REMOTE_ADDR']+" "+keywordStr)
+        conn = sqlite3.connect('Database.db')
+        c = conn.cursor()
+        c.execute('delete from Data where Date = "'+keywordStr+'";')
+        conn.commit()
+        del c,conn
+        return True

@@ -86,6 +86,30 @@ def Search_item():
     except:
         return "400 Bad Request",400
 
+@app.route("/Update_Text",methods=["POST"])
+def Update_Text():
+    try:
+        if request.form['DateStr'] and request.form["TextStr"]:
+            DateStr,TextStr = base64.b64encode(request.form["DateStr"].encode()).decode() , base64.b64encode(request.form["TextStr"].encode()).decode()
+            sql=pjsql.manage_sql()
+            sql.Update_Text(DateStr,TextStr)
+            del sql
+            return "Succ",200
+    except:
+        return "400 Bad Request",400
+
+@app.route("/Delete/<Date>")
+def Delete(Date):
+    try:
+        if Date:
+            Date=base64.b64encode(Date.encode()).decode()
+            sql=pjsql.manage_sql()
+            sql.Delete_Item(Date)
+            del sql
+            return "Succ",200
+    except:
+        return "400 Bad Request",400
+
 @app.route("/static/js/<filename>")
 def jsfile(filename):
     filename=urllib.parse.unquote(filename)

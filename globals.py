@@ -12,4 +12,6 @@ urls = {'index': '/',
 "getPD4":"/getPD/4",
 "Save_Result_to_sql":"/Save_Result_to_sql",
 "Search_item":"/Search_item",
+"Update_Text":"/Update_Text",
+"Delete_Item":"/Delete_Item",
 }
