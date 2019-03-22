@@ -1,6 +1,6 @@
 from flask import Flask,request,url_for,render_template ,Response
-import os,urllib.parse ,sys
-import globals
+import os,urllib.parse ,sys ,base64
+import globals , encrypt ,pjsql
 app = Flask(__name__)
 
 @app.route("/")
@@ -23,6 +23,92 @@ def update():
         return render_template("update.html",language="zh",position="update")
     else:
         return render_template("update.html",position="update")
+
+@app.route("/getAccount/")
+def getAccount():
+    try:
+        return encrypt.getAccount()
+    except:
+        return "500 Application Error",500
+
+@app.route("/getPD/<pdmode>")
+def getPD(pdmode):
+    try:
+        if pdmode == "1" :
+            return encrypt.getPassword_1()
+        elif pdmode == "2" :
+            return encrypt.getPassword_2()
+        elif pdmode == "3" :
+            return encrypt.getPassword_3()
+        elif pdmode == "4" :
+            return encrypt.getPassword_max()
+    except:
+        return "500 Application Error",500
+
+@app.route("/Save_Result_to_sql",methods=["POST"])
+def Save_Result_to_sql():
+    try:
+        if request.form['password'] and request.form["AccountStr"]:
+            try:
+                AddressStr =base64.b64encode(request.form["AddressStr"].encode()).decode()
+            except:
+                AddressStr = "Tm9BZGRyZXNz" #NoAddress
+            try:
+                Text=base64.b64encode(request.form["Text"].decode()).decode()
+            except:
+                Text="Tm9WYWx1ZQ==" # NoValue
+            AccountStr,Password =base64.b64encode(request.form['password'].encode()).decode() , base64.b64encode(request.form['password'].encode()).decode()
+            sql=pjsql.manage_sql()
+            sql.Save_Result_to_sql(AddressStr,AccountStr,Password,Text)
+            del sql
+            return "Succ",200
+    except:
+        return "400 Bad Request",400
+
+@app.route("/Search_item",methods=["POST"])
+def Search_item():
+    try:
+        if request.form['key'] and request.form["keyword"]:
+            keyword = base64.b64encode(request.form["keyword"].encode()).decode()
+            key=request.form['key']
+            if key == "0":
+                KeyMode_Str='Address'
+            elif key == "1":
+                KeyMode_Str='Account'
+            elif key == "2":
+                KeyMode_Str='Password'
+            else:
+                return "400 Bad Request",400
+            sql=pjsql.manage_sql()
+            result=sql.Search_Item(KeyMode_Str,keyword)
+            del sql
+            return result,200
+    except:
+        return "400 Bad Request",400
+
+@app.route("/Update_Text",methods=["POST"])
+def Update_Text():
+    try:
+        if request.form['DateStr'] and request.form["TextStr"]:
+            DateStr,TextStr = base64.b64encode(request.form["DateStr"].encode()).decode() , base64.b64encode(request.form["TextStr"].encode()).decode()
+            sql=pjsql.manage_sql()
+            sql.Update_Text(DateStr,TextStr)
+            del sql
+            return "Succ",200
+    except:
+        return "400 Bad Request",400
+
+@app.route("/Delete/<Date>")
+def Delete(Date):
+    try:
+        if Date:
+            Date=base64.b64encode(Date.encode()).decode()
+            sql=pjsql.manage_sql()
+            sql.Delete_Item(Date)
+            del sql
+            return "Succ",200
+    except:
+        return "400 Bad Request",400
 
 @app.route("/static/js/<filename>")
 def jsfile(filename):
@@ -60,6 +146,8 @@ def imgfile(filename):
                     yield data
         return Response(getfiledata(),mimetype="application/octet-stream",headers={"Content-Type":"application/octet-stream"})
 
+
+
 def get_urls(varname):
     if varname in globals.urls:
         return globals.urls[varname]
@@ -68,9 +156,9 @@ app.add_template_global(get_urls,"get_urls")
 
 
 if __name__ == "__main__":
-    if len(sys.argv) > 1:
+    if len(sys.argv) > 2:
         app.run(sys.argv[0],port=sys.argv[1])
-    elif len(sys.argv) > 0:
+    elif len(sys.argv) > 1:
         app.run(sys.argv[0])
     else:
         app.debug = True

@@ -31,7 +31,7 @@
 				Generate_pw1()
 			}
 			else {
-				$.get("/getAccount/",function(data){
+				$.get("{{get_urls('getAccount')}}",function(data){
 					Generate_AccountStr = data;
 					document.getElementById("Result_Account").value = Generate_AccountStr;
 
@@ -41,7 +41,7 @@
 			}
 		}
 		function Generate_pw1(){
-				$.get("/getPassword_1/",function(data){
+				$.get("{{get_urls('getPD1')}}",function(data){
 					document.getElementById("pw1").value = data;
 
 					Generate_pw2()
@@ -49,7 +49,7 @@
 			
 		}
 		function Generate_pw2(){
-			$.get("/getPassword_2/",function(data){
+			$.get("{{get_urls('getPD2')}}",function(data){
 				document.getElementById("pw2").value = data;
 
 				Generate_pw3()
@@ -57,7 +57,7 @@
 			)
 		}
 		function Generate_pw3(){
-			$.get("/getPassword_3/",function(data){
+			$.get("{{get_urls('getPD3')}}",function(data){
 				document.getElementById("pw3").value = data;
 
 				Generate_pwmax()
@@ -65,7 +65,7 @@
 			)
 		}
 		function Generate_pwmax(){
-			$.get("/getPassword_max/",function(data){
+			$.get("{{get_urls('getPD4')}}",function(data){
 				document.getElementById("pwmax").value = data;
 				}
 			)
