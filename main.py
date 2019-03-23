@@ -157,9 +157,9 @@ app.add_template_global(get_urls,"get_urls")
 
 if __name__ == "__main__":
     if len(sys.argv) > 2:
-        app.run(sys.argv[0],port=sys.argv[1])
+        app.run(sys.argv[1],port=sys.argv[2])
     elif len(sys.argv) > 1:
-        app.run(sys.argv[0])
+        app.run(sys.argv[1])
     else:
         app.debug = True
         app.run()
