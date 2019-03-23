@@ -3,8 +3,13 @@ with open("pjsetting.py","w",encoding="utf-8") as pjs:
     if not MyCode:
         import Tools.GetMyCode
         MyCode=Tools.GetMyCode.generate()
-    MyCode="MyCode = \"\"\""+ MyCode +"\"\"\""
+    MyCode=return_full_str("MyCode = \"\"\"", MyCode)
     sqltype=input("sql type (Auto sqlite3,not suppost all database) = ")
     if not sqltype:
         sqltype="sqlite3"
-    sqltype="sqltype = \"\"\""+ sqltype +"\"\"\""
+    sqltype=return_full_str("sqltype = \"\"\"",sqltype)
+    pjs.write(MyCode)
+    pjs.write(sqltype)
+
+def return_full_str(strings1,strings2):
+    return strings1+strings2+"\"\"\"\n"
