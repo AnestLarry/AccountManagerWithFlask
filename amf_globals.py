@@ -14,4 +14,6 @@ urls = {'index': '/',
 "Search_item":"/Search_item",
 "Update_Text":"/Update_Text",
 "Delete_Item":"/Delete_Item",
+"Restore":"/Restore/",
+"Restore_zh":"/Restore/?language=zh"
 }
