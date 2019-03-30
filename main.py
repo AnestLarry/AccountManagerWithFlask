@@ -20,9 +20,9 @@ def search():
 @app.route("/update/")
 def update():
     if request.args.get("language","") == "zh":
-        return render_template("update.html",language="zh",position="update")
+        return render_template("Update.html",language="zh",position="update")
     else:
-        return render_template("update.html",position="update")
+        return render_template("Update.html",position="update")
 
 @app.route("/getAccount/")
 def getAccount():
