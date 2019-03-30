@@ -51,3 +51,12 @@ class manage_sql:
         conn.commit()
         del c,conn
         return True
+
+    def Backup_Database(self):
+        def getfiledata():
+            with open("Database.db","rb") as img:
+                data = True
+                while data:
+                    data = img.read(1024*1)
+                    yield data
+        return getfiledata()
