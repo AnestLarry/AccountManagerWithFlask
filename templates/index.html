@@ -28,45 +28,25 @@
 				Generate_AccountStr = $('#Account').val();
 				document.getElementById('Result_Account').value = Generate_AccountStr;
 
-				Generate_pw1()
+				Generate_pw()
 			}
 			else {
 				$.get("{{get_urls('getAccount')}}",function(data){
 					Generate_AccountStr = data;
 					document.getElementById("Result_Account").value = Generate_AccountStr;
 
-					Generate_pw1()
+					Generate_pw()
 				})
 				
 			}
 		}
-		function Generate_pw1(){
-				$.get("{{get_urls('getPD1')}}",function(data){
-					document.getElementById("pw1").value = data;
-
-					Generate_pw2()
-				})	
-			
-		}
-		function Generate_pw2(){
-			$.get("{{get_urls('getPD2')}}",function(data){
-				document.getElementById("pw2").value = data;
-
-				Generate_pw3()
-				}
-			)
-		}
-		function Generate_pw3(){
-			$.get("{{get_urls('getPD3')}}",function(data){
-				document.getElementById("pw3").value = data;
-
-				Generate_pwmax()
-				}
-			)
-		}
-		function Generate_pwmax(){
-			$.get("{{get_urls('getPD4')}}",function(data){
-				document.getElementById("pwmax").value = data;
+		function Generate_pw(){
+				$.get("{{get_urls('getPW')}}",function(data){
+					var jsons = JSON.parse(data);
+					document.getElementById("pw1").value = jsons["pw1"];
+				document.getElementById("pw2").value = jsons["pw2"];
+				document.getElementById("pw3").value = jsons["pw3"];
+				document.getElementById("pwmax").value = jsons["pwmax"];
 				}
 			)
 		}

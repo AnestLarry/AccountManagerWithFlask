@@ -1,3 +1,6 @@
+def return_full_str(strings1,strings2):
+    return strings1+strings2+"\"\"\"\n"
+
 with open("pjsetting.py","w",encoding="utf-8") as pjs:
     MyCode=input("MyCode (if none,well get it from tool auto) = ")
     if not MyCode:
@@ -10,6 +13,3 @@ with open("pjsetting.py","w",encoding="utf-8") as pjs:
     sqltype=return_full_str("sqltype = \"\"\"",sqltype)
     pjs.write(MyCode)
     pjs.write(sqltype)
-
-def return_full_str(strings1,strings2):
-    return strings1+strings2+"\"\"\"\n"

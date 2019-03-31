@@ -1,0 +1,41 @@
+<html>
+{% include "nav.html" %}
+	<hr>
+	{% if language=="zh" %}
+	<p align="center">恢复</p>
+	<hr>
+	<div id="Restore">
+		<div id="Restore-label" style="width:45%;float:left;">
+			&emsp;&emsp;文件
+		</div>
+		<div id="Restore-choice-file" style="width:45%;float:left;">
+            <form method="POST" enctype="multipart/form-data">
+                <input type="file" name="db_file">
+                <input type="submit" value="上传">
+                <input name="language" style="display:none;" value="zh"/>
+           </form>
+		</div>
+	</div>
+	{% else %}
+	<p align="center">Restore</p>
+	<hr>
+	<div id="Restore">
+		<div id="Restore-label" style="width:45%;float:left;">
+			&emsp;&emsp;File
+		</div>
+		<div id="Restore-choice-file" style="width:45%;float:left;">
+            <form method="POST" enctype="multipart/form-data">
+                <input type="file" name="db_file">
+                <input type="submit" value="Upload">
+                <input name="language" style="display:none;" value=""/>
+           </form>
+        </div>
+        <p align="center" id=Status></p>
+	</div>
+    {% endif %}
+    <div id="Restore-Status" style="width:85%;float:left;">
+        <p align='center'>{{ Status }}</p>
+        <p align='center'>{{ Date }}</p>
+    </div>
+</body>
+</html>

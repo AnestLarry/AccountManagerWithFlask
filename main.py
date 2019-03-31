@@ -1,6 +1,6 @@
 from flask import Flask,request,url_for,render_template ,Response
-import os,urllib.parse ,sys ,base64
-import globals , encrypt ,pjsql
+import os,urllib.parse ,sys ,base64 ,time , platform
+import amf_globals , encrypt ,pjsql
 app = Flask(__name__)
 
 @app.route("/")
@@ -20,9 +20,9 @@ def search():
 @app.route("/update/")
 def update():
     if request.args.get("language","") == "zh":
-        return render_template("update.html",language="zh",position="update")
+        return render_template("Update.html",language="zh",position="update")
     else:
-        return render_template("update.html",position="update")
+        return render_template("Update.html",position="update")
 
 @app.route("/getAccount/")
 def getAccount():
@@ -31,19 +31,9 @@ def getAccount():
     except:
         return "500 Application Error",500
 
-@app.route("/getPD/<pdmode>")
-def getPD(pdmode):
-    try:
-        if pdmode == "1" :
-            return encrypt.getPassword_1()
-        elif pdmode == "2" :
-            return encrypt.getPassword_2()
-        elif pdmode == "3" :
-            return encrypt.getPassword_3()
-        elif pdmode == "4" :
-            return encrypt.getPassword_max()
-    except:
-        return "500 Application Error",500
+@app.route("/getPW/")
+def getPW():
+    return encrypt.getpassword()
 
 @app.route("/Save_Result_to_sql",methods=["POST"])
 def Save_Result_to_sql():
@@ -110,6 +100,26 @@ def Delete(Date):
     except:
         return "400 Bad Request",400
 
+@app.route("/Backup/")
+def Backup():
+    sql=pjsql.manage_sql()
+    return Response(sql.Backup_Database(),mimetype="application/octet-stream",headers={"Content-Type":"application/octet-stream","Content-disposition":
+        "attachment; filename="+str(time.strftime(r"%Y-%m-%d--%H-%M-%S")+".db")})
+
+@app.route("/Restore/",methods=["GET","POST"])
+def Restore():
+    if request.method == "POST":
+        upload_db = request.files["db_file"]
+        if os.path.exists("Database.db"):
+            change_db_file_name()
+        upload_db.save("Database.db")
+        del upload_db
+        return render_template("Restore.html",position="Restore",language=request.args.get("language",""),Status="Uploaded file Success!",Date=str(time.strftime(r"%Y-%m-%d--%H-%M-%S")))
+    if request.args.get("language","") == "zh":
+        return render_template("Restore.html",position="Restore",language="zh")
+    else:
+        return render_template("Restore.html",position="Restore")
+
 @app.route("/static/js/<filename>")
 def jsfile(filename):
     filename=urllib.parse.unquote(filename)
@@ -149,11 +159,18 @@ def imgfile(filename):
 
 
 def get_urls(varname):
-    if varname in globals.urls:
-        return globals.urls[varname]
-    return globals.urls["index"]
+    if varname in amf_globals.urls:
+        return amf_globals.urls[varname]
+    return amf_globals.urls["index"]
 app.add_template_global(get_urls,"get_urls")
 
+def change_db_file_name():
+    if platform.system() == "Windows":
+        os.system("rename Database.db "+str(time.strftime(r"%Y-%m-%d--%H-%M-%S")+".db"))
+    elif platform.system() == "Linux":
+        os.system("mv Database.db "+str(time.strftime(r"%Y-%m-%d--%H-%M-%S")+".db"))
+    else:
+        return False
 
 if __name__ == "__main__":
     if len(sys.argv) > 2:
