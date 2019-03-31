@@ -35,24 +35,29 @@ def getAccount():
 def getPW():
     return encrypt.getpassword()
 
-@app.route("/Save_Result_to_sql",methods=["POST"])
+@app.route("/Save_Result_to_sql/",methods=["POST"])
 def Save_Result_to_sql():
     try:
+        print(request.form['password'] , request.form["AccountStr"] , request.form["AddressStr"] ,request.form["Text"])
         if request.form['password'] and request.form["AccountStr"]:
             try:
-                AddressStr =base64.b64encode(request.form["AddressStr"].encode()).decode()
+                if request.form["AddressStr"]:
+                    AddressStr =base64.b64encode(request.form["AddressStr"].encode()).decode()
+                else:
+                    AddressStr = "Tm9BZGRyZXNz" #NoAddress
             except:
                 AddressStr = "Tm9BZGRyZXNz" #NoAddress
             try:
                 Text=base64.b64encode(request.form["Text"].decode()).decode()
             except:
                 Text="Tm9WYWx1ZQ==" # NoValue
-            AccountStr,Password =base64.b64encode(request.form['password'].encode()).decode() , base64.b64encode(request.form['password'].encode()).decode()
+            AccountStr,Password =base64.b64encode(request.form['AccountStr'].encode()).decode() , base64.b64encode(request.form['password'].encode()).decode()
             sql=pjsql.manage_sql()
             sql.Save_Result_to_sql(AddressStr,AccountStr,Password,Text)
             del sql
             return "Succ",200
-    except:
+    except IOError:
+        print(IOError)
         return "400 Bad Request",400
 
 @app.route("/Search_item",methods=["POST"])
@@ -155,8 +160,6 @@ def imgfile(filename):
                     data = img.read(1024*1)
                     yield data
         return Response(getfiledata(),mimetype="application/octet-stream",headers={"Content-Type":"application/octet-stream"})
-
-
 
 def get_urls(varname):
     if varname in amf_globals.urls:
