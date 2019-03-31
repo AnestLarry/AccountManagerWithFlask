@@ -31,19 +31,9 @@ def getAccount():
     except:
         return "500 Application Error",500
 
-@app.route("/getPD/<pdmode>")
-def getPD(pdmode):
-    try:
-        if pdmode == "1" :
-            return encrypt.getPassword_1()
-        elif pdmode == "2" :
-            return encrypt.getPassword_2()
-        elif pdmode == "3" :
-            return encrypt.getPassword_3()
-        elif pdmode == "4" :
-            return encrypt.getPassword_max()
-    except:
-        return "500 Application Error",500
+@app.route("/getPW/")
+def getPW():
+    return encrypt.getpassword()
 
 @app.route("/Save_Result_to_sql",methods=["POST"])
 def Save_Result_to_sql():
