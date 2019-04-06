@@ -36,8 +36,8 @@
             {% else %}
             <a href="{{ get_urls('index') }}"><button>English</button></a>&emsp;&emsp;<a href="{{ get_urls('index_zh') }}"><button> 简体中文</button></a>
             {% endif %}
-		</div>
-	</div>
+        </div>
+    </div>
 	<br><br>
 	<div id="function-nav" >
         <div id="function-label" style="width:45%;float:left;">
@@ -57,4 +57,43 @@
         </div>
         {% endif %}
 	</div>
-	<br><br>
+    <br><br><hr>
+    {% if is_Login=="True" %}
+    <div id="login-nav">
+        <div id="login-account-label" style="width:45%;float:left;">
+            {% if language=="zh" %}
+            &emsp;&emsp;用户名
+            {% else %}
+            &emsp;&emsp;User's name
+            {% endif %}
+		</div>
+        <div id="login-account-div" style="width:45%;float:left;">
+            <span>{{login_username}}</span>&emsp;&emsp;<input type="button" value="Logout" id="login-button-logout"/>
+        </div>
+    </div>
+    {% else %}
+    <div id="login-nav">
+        <div id="login-account-label" style="width:45%;float:left;">
+            {% if language=="zh" %}
+            &emsp;&emsp;登录帐号
+            {% else %}
+            &emsp;&emsp;Login Account
+            {% endif %}
+		</div>
+        <div id="login-account-div" style="width:45%;float:left;">
+            <input type="text" id="login-account"/>
+        </div>
+        <br><br>
+        <div id="login-password-label" style="width:45%;float:left;">
+            {% if language=="zh" %}
+            &emsp;&emsp;登录密码
+            {% else %}
+            &emsp;&emsp;Login Password
+            {% endif %}
+		</div>
+        <div id="login-password-div" style="width:45%;float:left;">
+            <input type="password" id="login-password"/>
+        </div>
+        <br><br><p align="center"><input type="button" value="Login" id="login-button-login"/></p>
+    {% endif %}
+	</div>

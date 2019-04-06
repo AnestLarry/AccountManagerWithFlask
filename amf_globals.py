@@ -12,5 +12,6 @@ urls = {'index': '/',
 "Update_Text":"/Update_Text",
 "Delete_Item":"/Delete_Item",
 "Restore":"/Restore/",
-"Restore_zh":"/Restore/?language=zh"
+"Restore_zh":"/Restore/?language=zh",
+"Login":"/Login/",
 }
