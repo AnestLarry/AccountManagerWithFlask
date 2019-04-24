@@ -20,9 +20,9 @@ def search():
 @app.route("/update/")
 def update():
     if request.args.get("language","") == "zh":
-        return render_template("Update.html",language="zh",position="update")
+        return render_template("update_page.html",language="zh",position="update")
     else:
-        return render_template("Update.html",position="update")
+        return render_template("update_page.html",position="update")
 
 @app.route("/getAccount/")
 def getAccount():
@@ -63,7 +63,7 @@ def Save_Result_to_sql():
 @app.route("/Search_item",methods=["POST"])
 def Search_item():
     try:
-        if request.form['key'] and request.form["keyword"]:
+        if request.form['key'] and request.form["keyword"] and request.form['language']:
             keyword = base64.b64encode(request.form["keyword"].encode()).decode()
             key=request.form['key']
             if key == "0":
@@ -75,7 +75,7 @@ def Search_item():
             else:
                 return "400 Bad Request",400
             sql=pjsql.manage_sql()
-            result=sql.Search_Item(KeyMode_Str,keyword)
+            result=sql.Search_Item(KeyMode_Str,keyword, request.form['language'] )
             del sql
             return result,200
     except:
