@@ -11,7 +11,6 @@ class manage_sql:
         self.__sqltype=sqlname
 
     def Save_Result_to_sql(self,AddressStr,AccountStr,password,Text):
-        #log.info(request.META['REMOTE_ADDR']+" Address { "+AddressStr+" } Account { "+AccountStr+" }")
         conn = sqlite3.connect('Database.db')
         c = conn.cursor()
         c.execute('insert into Data values("'+AddressStr+'","'+AccountStr +'","'+ password +'","'+ base64.b64encode( time.strftime(r"%Y-%m-%d--%H-%M-%S--%A").encode() ).decode()+'","'+Text+'");')
@@ -20,7 +19,6 @@ class manage_sql:
         return True
 
     def Search_Item(self,key,keywordStr,language="en-us"):
-        #log.info(request.META['REMOTE_ADDR']+" ["+key+"] ["+keywordStr+"]")
         conn = sqlite3.connect('Database.db')
         c = conn.cursor()
         c.execute('select Address,Account,Password,Date,Text from Data where "'+key+'" = "'+keywordStr+'";')
@@ -51,7 +49,6 @@ class manage_sql:
             return string
 
     def Update_Text(self,DateStr,TextStr):
-        #log.info(request.META['REMOTE_ADDR']+" DateStr{ "+DateStr+" } TextStr { "+TextStr+" }")
         conn = sqlite3.connect('Database.db')
         c = conn.cursor()
         c.execute('update Data set Text="'+TextStr+'" where Date="'+DateStr +'";')
@@ -60,13 +57,17 @@ class manage_sql:
         return True
     
     def Delete_Item(self,keywordStr):
-        #log.warning(request.META['REMOTE_ADDR']+" "+keywordStr)
         conn = sqlite3.connect('Database.db')
         c = conn.cursor()
+
+        c.execute('select Address,Account,Password,Date,Text from Data where "Date" = "'+keywordStr+'";')
+        __result=""
+        for Item in c.fetchall():
+            __result+="Address { "+Item[0]+" } Account { "+Item[1]+"} Password {"+Item[2]+"} Text {"+Item[4]+" }"
         c.execute('delete from Data where Date = "'+keywordStr+'";')
         conn.commit()
         del c,conn
-        return True
+        return __result
 
     def Backup_Database(self):
         def getfiledata():

@@ -1,7 +1,20 @@
 from flask import Flask,request,url_for,render_template ,Response
-import os,urllib.parse ,sys ,base64 ,time , platform
+import os, urllib.parse ,sys ,base64 ,time , platform , logging 
 import amf_globals , encrypt ,pjsql
 app = Flask(__name__)
+
+log = logging.getLogger(__name__)
+fhandler = logging.FileHandler("runserver.log",mode="a+")
+fhandler.setLevel(logging.INFO)
+formatter=logging.Formatter('%(asctime)s %(filename)s[line:%(lineno)d] %(levelname)s <%(funcName)s> %(message)s')
+fhandler.setFormatter(formatter)
+
+ch = logging.StreamHandler()
+ch.setLevel(logging.INFO)
+ch.setFormatter(formatter)
+
+log.addHandler(fhandler)
+log.addHandler(ch)
 
 @app.route("/")
 def index():
@@ -38,7 +51,6 @@ def getPW():
 @app.route("/Save_Result_to_sql/",methods=["POST"])
 def Save_Result_to_sql():
     try:
-        print(request.form['password'] , request.form["AccountStr"] , request.form["AddressStr"] ,request.form["Text"])
         if request.form['password'] and request.form["AccountStr"]:
             try:
                 if request.form["AddressStr"]:
@@ -52,6 +64,9 @@ def Save_Result_to_sql():
             except:
                 Text="Tm9WYWx1ZQ==" # NoValue
             AccountStr,Password =base64.b64encode(request.form['AccountStr'].encode()).decode() , base64.b64encode(request.form['password'].encode()).decode()
+            
+            log.warning("Address { "+ request.form["AddressStr"] +" } Account { "+ request.form["AccountStr"]+" } Text {"+ request.form["Text"]+" }")
+            
             sql=pjsql.manage_sql()
             sql.Save_Result_to_sql(AddressStr,AccountStr,Password,Text)
             del sql
@@ -74,6 +89,9 @@ def Search_item():
                 KeyMode_Str='Password'
             else:
                 return "400 Bad Request",400
+            
+            log.warning("Search Word { "+keyword+" } Class { "+ KeyMode_Str + " }")
+
             sql=pjsql.manage_sql()
             result=sql.Search_Item(KeyMode_Str,keyword, request.form['language'] )
             del sql
@@ -86,6 +104,9 @@ def Update_Text():
     try:
         if request.form['DateStr'] and request.form["TextStr"]:
             DateStr,TextStr = base64.b64encode(request.form["DateStr"].encode()).decode() , base64.b64encode(request.form["TextStr"].encode()).decode()
+
+            log.warning("Date { "+ request.form['DateStr'] +" } TextStr { "+request.form["TextStr"]+" } ")
+
             sql=pjsql.manage_sql()
             sql.Update_Text(DateStr,TextStr)
             del sql
@@ -99,7 +120,7 @@ def Delete(Date):
         if Date:
             Date=base64.b64encode(Date.encode()).decode()
             sql=pjsql.manage_sql()
-            sql.Delete_Item(Date)
+            log.warning( sql.Delete_Item(Date) )
             del sql
             return "Succ",200
     except:
@@ -107,6 +128,7 @@ def Delete(Date):
 
 @app.route("/Backup/")
 def Backup():
+    log.critical("Backup is Downloaded! Downloader's ip { "+request.remote_addr+" } ")
     sql=pjsql.manage_sql()
     return Response(sql.Backup_Database(),mimetype="application/octet-stream",headers={"Content-Type":"application/octet-stream","Content-disposition":
         "attachment; filename="+str(time.strftime(r"%Y-%m-%d--%H-%M-%S")+".db")})
@@ -115,6 +137,7 @@ def Backup():
 def Restore():
     if request.method == "POST":
         upload_db = request.files["db_file"]
+        log.critical("Backup is Uploaded! Uploaded's ip { "+request.remote_addr+" } ")
         if os.path.exists("Database.db"):
             change_db_file_name()
         upload_db.save("Database.db")
