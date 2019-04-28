@@ -87,13 +87,15 @@ def Search_item():
                 KeyMode_Str='Account'
             elif key == "2":
                 KeyMode_Str='Password'
+            elif key == "3":
+                KeyMode_Str='Text'
             else:
                 return "400 Bad Request",400
             
             log.warning("Search Word { "+keyword+" } Class { "+ KeyMode_Str + " }")
 
             sql=pjsql.manage_sql()
-            result=sql.Search_Item(KeyMode_Str,keyword, request.form['language'] )
+            result=sql.Search_Item(KeyMode_Str,keyword, request.form['language'] ) + "<br>Search Time:" + time.strftime("%Y-%m-%d-%H-%M-%S")
             del sql
             return result,200
     except:

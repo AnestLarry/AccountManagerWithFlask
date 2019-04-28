@@ -21,7 +21,10 @@ class manage_sql:
     def Search_Item(self,key,keywordStr,language="en-us"):
         conn = sqlite3.connect('Database.db')
         c = conn.cursor()
-        c.execute('select Address,Account,Password,Date,Text from Data where "'+key+'" = "'+keywordStr+'";')
+        if key == "Text":
+            c.execute('select Address,Account,Password,Date,Text from Data where "'+key+'" in "'+keywordStr+'";')
+        else:
+            c.execute('select Address,Account,Password,Date,Text from Data where "'+key+'" = "'+keywordStr+'";')
         result_Str='<font size=5>'
         for Item in c.fetchall():
             result_Str+='<table border="1"><tr><td>'+self.__Search_Item_translate_tag(language,"Address")+'</td><td><input readonly style="width:250px" onfocus="this.select()" value="'+base64.b64decode(Item[0].encode()).decode()+'"/></td></tr> \
