@@ -7,33 +7,29 @@ class initsql:
         elif sqlname == "mysql":
             self.sqltype = "mysql"
 class manage_sql:
-    def __init__(self,sqlname="sqlite3"):
+    def __init__(self,sqlname="sqlite3",file="Database.db"):
         self.__sqltype=sqlname
+        self.__conn = sqlite3.connect('Database.db')
+        self.__c = self.__conn.cursor()
 
     def Save_Result_to_sql(self,AddressStr,AccountStr,password,Text):
-        conn = sqlite3.connect('Database.db')
-        c = conn.cursor()
-        c.execute('insert into Data values("'+AddressStr+'","'+AccountStr +'","'+ password +'","'+ base64.b64encode( time.strftime(r"%Y-%m-%d--%H-%M-%S--%A").encode() ).decode()+'","'+Text+'");')
-        conn.commit()
-        del c,conn
+        self.__c.execute('insert into Data values("'+AddressStr+'","'+AccountStr +'","'+ password +'","'+ base64.b64encode( time.strftime(r"%Y-%m-%d--%H-%M-%S--%A").encode() ).decode()+'","'+Text+'");')
+        self.__conn.commit()
         return True
 
     def Search_Item(self,key,keywordStr,language="en-us"):
-        conn = sqlite3.connect('Database.db')
-        c = conn.cursor()
         if key == "Text":
-            c.execute('select Address,Account,Password,Date,Text from Data where "'+key+'" in "'+keywordStr+'";')
+            self.__c.execute('select Address,Account,Password,Date,Text from Data where "'+key+'" in "'+keywordStr+'";')
         else:
-            c.execute('select Address,Account,Password,Date,Text from Data where "'+key+'" = "'+keywordStr+'";')
+            self.__c.execute('select Address,Account,Password,Date,Text from Data where "'+key+'" = "'+keywordStr+'";')
         result_Str='<font size=5>'
-        for Item in c.fetchall():
+        for Item in self.__c.fetchall():
             result_Str+='<table border="1"><tr><td>'+self.__Search_Item_translate_tag(language,"Address")+'</td><td><input readonly style="width:250px" onfocus="this.select()" value="'+base64.b64decode(Item[0].encode()).decode()+'"/></td></tr> \
             <tr><td>  '+self.__Search_Item_translate_tag(language,"Account")+' </td><td><input readonly style="width:250px" onfocus="this.select()" value="'+base64.b64decode(Item[1].encode()).decode()+'"/></td></tr> \
             <tr><td>'+self.__Search_Item_translate_tag(language,"Password")+' </td><td><input readonly style="width:250px" onfocus="this.select()" value="'+base64.b64decode(Item[2].encode()).decode()+'"/></td></tr>\
             <tr><td>  '+self.__Search_Item_translate_tag(language,"Date")+'  </td><td><input readonly style="width:250px" onfocus="this.select()" value="'+base64.b64decode(Item[3].encode()).decode()+'"/></td></tr>\
             <tr><td>  '+self.__Search_Item_translate_tag(language,"Text")+'  </td><td><input readonly style="width:250px" onfocus="this.select()" value="'+base64.b64decode(Item[4].encode()).decode() +'"/></td></tr></table><br>'
         result_Str+='</font>'
-        del c,conn
         return result_Str
     
     def __Search_Item_translate_tag(self,language,string):
@@ -52,24 +48,17 @@ class manage_sql:
             return string
 
     def Update_Text(self,DateStr,TextStr):
-        conn = sqlite3.connect('Database.db')
-        c = conn.cursor()
-        c.execute('update Data set Text="'+TextStr+'" where Date="'+DateStr +'";')
-        conn.commit()
-        del c,conn
+        self.__c.execute('update Data set Text="'+TextStr+'" where Date="'+DateStr +'";')
+        self.__conn.commit()
         return True
     
     def Delete_Item(self,keywordStr):
-        conn = sqlite3.connect('Database.db')
-        c = conn.cursor()
-
-        c.execute('select Address,Account,Password,Date,Text from Data where "Date" = "'+keywordStr+'";')
+        self.__c.execute('select Address,Account,Password,Date,Text from Data where "Date" = "'+keywordStr+'";')
         __result=""
-        for Item in c.fetchall():
+        for Item in self.__c.fetchall():
             __result+="Address { "+Item[0]+" } Account { "+Item[1]+"} Password {"+Item[2]+"} Text {"+Item[4]+" }"
-        c.execute('delete from Data where Date = "'+keywordStr+'";')
-        conn.commit()
-        del c,conn
+        self.__c.execute('delete from Data where Date = "'+keywordStr+'";')
+        self.__conn.commit()
         return __result
 
     def Backup_Database(self):
