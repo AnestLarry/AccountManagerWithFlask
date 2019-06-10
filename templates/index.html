@@ -24,21 +24,13 @@
 			})
 		});
 		function Generate_Account(){
-			if (document.getElementById('Account_Key').checked){
-				Generate_AccountStr = $('#Account').val();
-				document.getElementById('Result_Account').value = Generate_AccountStr;
-
-				Generate_pw()
-			}
-			else {
+			if (!document.getElementById('Account_Key').checked){
 				$.get("{{get_urls('getAccount')}}",function(data){
 					Generate_AccountStr = data;
 					document.getElementById("Result_Account").value = Generate_AccountStr;
-
-					Generate_pw()
 				})
-				
 			}
+			Generate_pw()
 		}
 		function Generate_pw(){
 				$.get("{{get_urls('getPW')}}",function(data){
@@ -67,34 +59,6 @@
 				})
 		}
     </script>
-	<hr>
-	<br>
-	<div id="Generate-div">
-		<div id="Generate-label-Account" style="width:45%;float:left;">
-			{% if language=="zh" %}
-			&emsp;&emsp;账号
-			{% else %}
-			&emsp;&emsp;Account
-			{% endif %}
-		</div>
-		<div id="Generate-input-Account" style="width:45%;float:left;">
-			<input id="Account" />
-		</div>
-		<br><br>
-		<div id="Generate-label-Used_Account_Key" style="width:45%;float:left;">
-			{% if language=="zh" %}
-			&emsp;&emsp;使用自定义账号
-			{% else %}
-			&emsp;&emsp;Used Account Key
-			{% endif %}
-		</div>
-		<div id="Generate-choice-text" style="width:45%;float:left;">
-			<input type='checkbox' id="Account_Key" />
-		</div>
-	</div>
-	<br>
-	<p align="center"><input type="button" id='Generate' value="Generate"></p>
-	<br>
 	{% if language=="zh" %}
 	<hr><p align="center">生成结果 </p><hr><br>
 	{% else %}
@@ -113,7 +77,7 @@
 			&emsp;&emsp;账号
 		</div>
 		<div id="Generated_Result-input-Account" style="width:45%;float:left;">
-			<input id="Result_Account" />
+			<input id="Result_Account" />&emsp;固定&emsp;<input type='checkbox' id="Account_Key" />
 		</div>
 		<br><br>
 		<div id="Generated_Result-label-Password_lv1" style="width:45%;float:left;">
@@ -152,7 +116,7 @@
 		</div>
 		<br><br>
 	</div>
-	<p align="center"> <input type="button" id='Save' value="保存结果"/></p>
+	<p align="center"><input type="button" id='Generate' value="生成">&emsp;&emsp; <input type="button" id='Save' value="保存结果"/></p>
 	{% else %}
 	<div id="Generated_Result-div">
 		<div id="Generate-label-Address" style="width:45%;float:left;">
@@ -166,7 +130,7 @@
 			&emsp;&emsp;Account
 		</div>
 		<div id="Generated_Result-input-Account" style="width:45%;float:left;">
-			<input id="Result_Account" />
+			<input id="Result_Account" />&emsp;Fixed&emsp;<input type='checkbox' id="Account_Key" />
 		</div>
 		<br><br>
 		<div id="Generated_Result-label-Password_lv1" style="width:45%;float:left;">
@@ -205,7 +169,7 @@
 		</div>
 		<br><br>
 	</div>
-	<p align="center"> <input type="button" id='Save' value="Save Result"/></p>
+	<p align="center"><input type="button" id='Generate' value="Generate">&emsp;&emsp; <input type="button" id='Save' value="Save Result"/></p>
 	{% endif %}
 </body>
 </html>

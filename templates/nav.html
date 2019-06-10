@@ -49,11 +49,11 @@
         </div>
         {% if language=="zh" %}
         <div id="function-choice" style="width:45%;float:left;">
-			<a href="{{ get_urls('index_zh') }}"><button>生成器</button></a>&emsp;&emsp;<a href="{{get_urls('search_zh')}}"><button>搜索</button></a>&emsp;&emsp;<a href="{{get_urls('update_zh')}}"><button>更新标注</button></a>&emsp;&emsp;<a href="{{get_urls('Restore_zh')}}"><button>恢复</button></a>
+			<a href="{{ get_urls('index_zh') }}"><button>生成器</button></a>&emsp;&emsp;<a href="{{get_urls('search_zh')}}"><button>搜索</button></a>&emsp;&emsp;<a href="{{get_urls('update_zh')}}"><button>更新</button></a>&emsp;&emsp;<a href="{{get_urls('Restore_zh')}}"><button>恢复</button></a>
         </div>
         {% else %}
 		<div id="function-choice" style="width:45%;float:left;">
-			<a href="{{ get_urls('index') }}"><button>Generation</button></a>&emsp;&emsp;<a href="{{get_urls('search')}}"><button>Search</button></a>&emsp;&emsp;<a href="{{get_urls('update')}}"><button>Update Text</button></a>&emsp;&emsp;<a href="{{get_urls('Restore')}}"><button>Restore</button></a>
+			<a href="{{ get_urls('index') }}"><button>Generation</button></a>&emsp;&emsp;<a href="{{get_urls('search')}}"><button>Search</button></a>&emsp;&emsp;<a href="{{get_urls('update')}}"><button>Update</button></a>&emsp;&emsp;<a href="{{get_urls('Restore')}}"><button>Restore</button></a>
         </div>
         {% endif %}
 	</div>
