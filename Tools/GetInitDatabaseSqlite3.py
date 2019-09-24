@@ -1,8 +1,10 @@
-import os.path , sqlite3
+import os.path
+import sqlite3
 if not os.path.exists("Database.db"):
     conn = sqlite3.connect("Database.db")
-    c=conn.cursor()
-    c.execute('CREATE TABLE Data ("Address" TEXT,"Account" TEXT,"Password" TEXT,"Date" TEXT,"Text" TEXT);')
+    c = conn.cursor()
+    c.execute(
+        'CREATE TABLE Data ("Address" TEXT,"Account" TEXT,"Password" TEXT,"Date" TEXT,"Text" TEXT);')
     c.execute('CREATE TABLE User (Account CLOB,Password CLOB);')
     c.execute('CREATE TABLE Note (Note1 CLOB,Note2 CLOB);')
     conn.commit()
@@ -16,7 +18,7 @@ if not os.path.exists("Database.db"):
     # SW5pdGlhbCBUZXN0aW5n initial Testing
     conn.commit()
     conn.close()
-    del conn,c
+    del conn, c
     print("Succ")
 else:
     print("Database file is existed!")
