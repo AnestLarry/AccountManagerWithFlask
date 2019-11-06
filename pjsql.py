@@ -4,7 +4,7 @@ import time
 
 
 class initsql:
-    def __init__(self, sqlname):
+    def __init__(self, sqlname: str):
         if sqlname == "sqlite3":
             self.sqltype = "sqlite3"
         elif sqlname == "mysql":
@@ -12,25 +12,25 @@ class initsql:
 
 
 class manage_sql:
-    def __init__(self, sqlname="sqlite3", file="Database.db"):
-        self.__sqltype = sqlname
+    def __init__(self, sqlname: str = "sqlite3", file: str = "Database.db"):
+        self.__sqltype: str = sqlname
         self.__conn = sqlite3.connect('Database.db')
         self.__c = self.__conn.cursor()
 
-    def Save_Result_to_sql(self, AddressStr, AccountStr, password, Text):
+    def Save_Result_to_sql(self, AddressStr: str, AccountStr: str, password: str, Text: str) -> bool:
         self.__c.execute('insert into Data values("'+AddressStr+'","'+AccountStr + '","' + password + '","' +
                          base64.b64encode(time.strftime(r"%Y-%m-%d--%H-%M-%S--%A").encode()).decode()+'","'+Text+'");')
         self.__conn.commit()
         return True
 
-    def Search_Item(self, key, keywordStr, language="en-us"):
+    def Search_Item(self, key: str, keywordStr: str, language: str = "en-us") -> str:
         if key == "Text":
             self.__c.execute(
                 'select Address,Account,Password,Date,Text from Data where "'+key+'" in "'+keywordStr+'";')
         else:
             self.__c.execute(
                 'select Address,Account,Password,Date,Text from Data where "'+key+'" = "'+keywordStr+'";')
-        result_Str = '<font size=5>'
+        result_Str: str = '<font size=5>'
         for Item in self.__c.fetchall():
             result_Str += '<table border="1"><tr><td>'+self.__Search_Item_translate_tag(language, "Address")+'</td><td><input readonly style="width:250px" onfocus="this.select()" value="'+base64.b64decode(Item[0].encode()).decode()+'"/></td></tr> \
             <tr><td>  '+self.__Search_Item_translate_tag(language, "Account")+' </td><td><input readonly style="width:250px" onfocus="this.select()" value="'+base64.b64decode(Item[1].encode()).decode()+'"/></td></tr> \
@@ -40,7 +40,7 @@ class manage_sql:
         result_Str += '</font>'
         return result_Str
 
-    def __Search_Item_translate_tag(self, language, string):
+    def __Search_Item_translate_tag(self, language: str, string: str) -> str:
         if language == "zh-cn":
             if string == "Address":
                 return "地址"
@@ -55,16 +55,16 @@ class manage_sql:
         else:
             return string
 
-    def Update_Text(self, DateStr, TextStr):
+    def Update_Text(self, DateStr: str, TextStr: str) -> bool:
         self.__c.execute('update Data set Text="'+TextStr +
                          '" where Date="'+DateStr + '";')
         self.__conn.commit()
         return True
 
-    def Delete_Item(self, keywordStr):
+    def Delete_Item(self, keywordStr: str) -> str:
         self.__c.execute(
             'select Address,Account,Password,Date,Text from Data where "Date" = "'+keywordStr+'";')
-        __result = ""
+        __result: str = ""
         for Item in self.__c.fetchall():
             __result += "Address { "+Item[0]+" } Account { " + \
                 Item[1]+"} Password {"+Item[2]+"} Text {"+Item[4]+" }"

@@ -9,7 +9,7 @@ import logging
 import amf_globals
 import encrypt
 import pjsql
-app = Flask(__name__)
+app: Flask = Flask(__name__)
 
 log = logging.getLogger(__name__)
 fhandler = logging.FileHandler("runserver.log", mode="a+")
@@ -69,23 +69,24 @@ def Save_Result_to_sql():
         if request.form['password'] and request.form["AccountStr"]:
             try:
                 if request.form["AddressStr"]:
-                    AddressStr = base64.b64encode(
+                    AddressStr: str = base64.b64encode(
                         request.form["AddressStr"].encode()).decode()
                 else:
-                    AddressStr = "Tm9BZGRyZXNz"  # NoAddress
+                    AddressStr: str = "Tm9BZGRyZXNz"  # NoAddress
             except:
-                AddressStr = "Tm9BZGRyZXNz"  # NoAddress
+                AddressStr: str = "Tm9BZGRyZXNz"  # NoAddress
             try:
-                Text = base64.b64encode(request.form["Text"].decode()).decode()
+                Text: str = base64.b64encode(
+                    request.form["Text"].decode()).decode()
             except:
-                Text = "Tm9WYWx1ZQ=="  # NoValue
-            AccountStr, Password = base64.b64encode(request.form['AccountStr'].encode(
+                Text: str = "Tm9WYWx1ZQ=="  # NoValue
+            AccountStr: str, Password: str = base64.b64encode(request.form['AccountStr'].encode(
             )).decode(), base64.b64encode(request.form['password'].encode()).decode()
 
             log.warning("Address { " + request.form["AddressStr"] + " } Account { " +
                         request.form["AccountStr"]+" } Text {" + request.form["Text"]+" }")
 
-            sql = pjsql.manage_sql()
+            sql: manage_sql = pjsql.manage_sql()
             sql.Save_Result_to_sql(AddressStr, AccountStr, Password, Text)
             del sql
             return "Succ", 200
@@ -100,7 +101,7 @@ def Search_item():
         if request.form['key'] and request.form["keyword"] and request.form['language']:
             keyword = base64.b64encode(
                 request.form["keyword"].encode()).decode()
-            key = request.form['key']
+            key: str = request.form['key']
             if key == "0":
                 KeyMode_Str = 'Address'
             elif key == "1":
@@ -115,8 +116,8 @@ def Search_item():
             log.warning("Search Word { "+keyword +
                         " } Class { " + KeyMode_Str + " }")
 
-            sql = pjsql.manage_sql()
-            result = sql.Search_Item(
+            sql: manage_sql = pjsql.manage_sql()
+            result: str = sql.Search_Item(
                 KeyMode_Str, keyword, request.form['language']) + "<br>Search Time:" + time.strftime("%Y-%m-%d-%H-%M-%S")
             del sql
             return result, 200
@@ -128,13 +129,13 @@ def Search_item():
 def Update_Text():
     try:
         if request.form['DateStr'] and request.form["TextStr"]:
-            DateStr, TextStr = base64.b64encode(request.form["DateStr"].encode()).decode(
+            DateStr: str, TextStr: str = base64.b64encode(request.form["DateStr"].encode()).decode(
             ), base64.b64encode(request.form["TextStr"].encode()).decode()
 
             log.warning(
                 "Date { " + request.form['DateStr'] + " } TextStr { "+request.form["TextStr"]+" } ")
 
-            sql = pjsql.manage_sql()
+            sql: manage_sql = pjsql.manage_sql()
             sql.Update_Text(DateStr, TextStr)
             del sql
             return "Succ", 200
@@ -143,11 +144,11 @@ def Update_Text():
 
 
 @app.route("/Delete/<Date>")
-def Delete(Date):
+def Delete(Date: str):
     try:
         if Date:
-            Date = base64.b64encode(Date.encode()).decode()
-            sql = pjsql.manage_sql()
+            Date: str = base64.b64encode(Date.encode()).decode()
+            sql: manage_sql = pjsql.manage_sql()
             log.warning(sql.Delete_Item(Date))
             del sql
             return "Succ", 200
@@ -159,7 +160,7 @@ def Delete(Date):
 def Backup():
     log.critical(
         "Backup is Downloaded! Downloader's ip { "+request.remote_addr+" } ")
-    sql = pjsql.manage_sql()
+    sql: manage_sql = pjsql.manage_sql()
     return Response(sql.Backup_Database(), mimetype="application/octet-stream", headers={"Content-Type": "application/octet-stream", "Content-disposition":
                                                                                          "attachment; filename="+str(time.strftime(r"%Y-%m-%d--%H-%M-%S")+".db")})
 
@@ -182,8 +183,8 @@ def Restore():
 
 
 @app.route("/static/js/<filename>")
-def jsfile(filename):
-    filename = urllib.parse.unquote(filename)
+def jsfile(filename: str):
+    filename: str = urllib.parse.unquote(filename)
     if os.path.exists("static/js/"+filename):
         def getfiledata():
             with open("static/js/"+filename, "rb") as js:
@@ -195,8 +196,8 @@ def jsfile(filename):
 
 
 @app.route("/static/css/<filename>")
-def cssfile(filename):
-    filename = urllib.parse.unquote(filename)
+def cssfile(filename: str):
+    filename: str = urllib.parse.unquote(filename)
     if os.path.exists("static/css/"+filename):
         def getfiledata():
             with open("static/css/"+filename, "rb") as css:
@@ -208,8 +209,8 @@ def cssfile(filename):
 
 
 @app.route("/static/img/<filename>")
-def imgfile(filename):
-    filename = urllib.parse.unquote(filename)
+def imgfile(filename: str):
+    filename: str = urllib.parse.unquote(filename)
     if os.path.exists("static/img/"+filename):
         def getfiledata():
             with open("static/img/"+filename, "rb") as img:
@@ -220,7 +221,7 @@ def imgfile(filename):
         return Response(getfiledata(), mimetype="application/octet-stream", headers={"Content-Type": "application/octet-stream"})
 
 
-def get_urls(varname):
+def get_urls(varname: str) -> str:
     if varname in amf_globals.urls:
         return amf_globals.urls[varname]
     return amf_globals.urls["index"]
@@ -229,13 +230,15 @@ def get_urls(varname):
 app.add_template_global(get_urls, "get_urls")
 
 
-def change_db_file_name():
+def change_db_file_name() -> bool:
     if platform.system() == "Windows":
         os.system("rename Database.db " +
                   str(time.strftime(r"%Y-%m-%d--%H-%M-%S")+".db"))
+        return True
     elif platform.system() == "Linux":
         os.system("mv Database.db " +
                   str(time.strftime(r"%Y-%m-%d--%H-%M-%S")+".db"))
+        return True
     else:
         return False
 
