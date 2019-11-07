@@ -7,10 +7,10 @@ with open("pjsetting.py", "w", encoding="utf-8") as pjs:
     if not MyCode:
         import Tools.GetMyCode
         MyCode = Tools.GetMyCode.generate()
-    MyCode = return_full_str("MyCode = \"\"\"", MyCode)
+    MyCode = return_full_str("MyCode: str = \"\"\"", MyCode)
     sqltype: str = input("sql type (Auto sqlite3,not suppost all database) = ")
     if not sqltype:
         sqltype = "sqlite3"
-    sqltype = return_full_str("sqltype = \"\"\"", sqltype)
+    sqltype = return_full_str("sqltype: str = \"\"\"", sqltype)
     pjs.write(MyCode)
     pjs.write(sqltype)

@@ -76,11 +76,10 @@ def Save_Result_to_sql():
             except:
                 AddressStr: str = "Tm9BZGRyZXNz"  # NoAddress
             try:
-                Text: str = base64.b64encode(
-                    request.form["Text"].decode()).decode()
+                Text: str = request.form["Text"].decode()
             except:
-                Text: str = "Tm9WYWx1ZQ=="  # NoValue
-            AccountStr: str, Password: str = base64.b64encode(request.form['AccountStr'].encode(
+                Text: str = "NoValue"  # NoValue
+            AccountStr, Password = base64.b64encode(request.form['AccountStr'].encode(
             )).decode(), base64.b64encode(request.form['password'].encode()).decode()
 
             log.warning("Address { " + request.form["AddressStr"] + " } Account { " +
@@ -110,6 +109,7 @@ def Search_item():
                 KeyMode_Str = 'Password'
             elif key == "3":
                 KeyMode_Str = 'Text'
+                keyword = request.form["keyword"]
             else:
                 return "400 Bad Request", 400
 
@@ -121,7 +121,7 @@ def Search_item():
                 KeyMode_Str, keyword, request.form['language']) + "<br>Search Time:" + time.strftime("%Y-%m-%d-%H-%M-%S")
             del sql
             return result, 200
-    except:
+    except IOError:
         return "400 Bad Request", 400
 
 
@@ -129,8 +129,8 @@ def Search_item():
 def Update_Text():
     try:
         if request.form['DateStr'] and request.form["TextStr"]:
-            DateStr: str, TextStr: str = base64.b64encode(request.form["DateStr"].encode()).decode(
-            ), base64.b64encode(request.form["TextStr"].encode()).decode()
+            DateStr, TextStr = base64.b64encode(request.form["DateStr"].encode()).decode(
+            ), request.form["TextStr"]
 
             log.warning(
                 "Date { " + request.form['DateStr'] + " } TextStr { "+request.form["TextStr"]+" } ")

@@ -26,7 +26,7 @@ class manage_sql:
     def Search_Item(self, key: str, keywordStr: str, language: str = "en-us") -> str:
         if key == "Text":
             self.__c.execute(
-                'select Address,Account,Password,Date,Text from Data where "'+key+'" in "'+keywordStr+'";')
+                'select Address,Account,Password,Date,Text from Data where Text LIKE "%'+keywordStr+'%";')
         else:
             self.__c.execute(
                 'select Address,Account,Password,Date,Text from Data where "'+key+'" = "'+keywordStr+'";')
@@ -36,7 +36,7 @@ class manage_sql:
             <tr><td>  '+self.__Search_Item_translate_tag(language, "Account")+' </td><td><input readonly style="width:250px" onfocus="this.select()" value="'+base64.b64decode(Item[1].encode()).decode()+'"/></td></tr> \
             <tr><td>'+self.__Search_Item_translate_tag(language, "Password")+' </td><td><input readonly style="width:250px" onfocus="this.select()" value="'+base64.b64decode(Item[2].encode()).decode()+'"/></td></tr>\
             <tr><td>  '+self.__Search_Item_translate_tag(language, "Date")+'  </td><td><input readonly style="width:250px" onfocus="this.select()" value="'+base64.b64decode(Item[3].encode()).decode()+'"/></td></tr>\
-            <tr><td>  '+self.__Search_Item_translate_tag(language, "Text")+'  </td><td><input readonly style="width:250px" onfocus="this.select()" value="'+base64.b64decode(Item[4].encode()).decode() + '"/></td></tr></table><br>'
+            <tr><td>  '+self.__Search_Item_translate_tag(language, "Text")+'  </td><td><input readonly style="width:250px" onfocus="this.select()" value="'+Item[4] + '"/></td></tr></table><br>'
         result_Str += '</font>'
         return result_Str
 
