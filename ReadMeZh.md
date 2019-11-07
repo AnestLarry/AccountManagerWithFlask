@@ -2,7 +2,9 @@
 ##### 基于 Flask==1.0.2
 * 页面: <a href="ReadMe.md">English</a> <a href="ReadMeZh.md">中文</a>
 
-### 版本 4.0
+[![LICENSE](https://img.shields.io/badge/License-Apache%20License%202.0-blue.svg)](LICENSE) [![codecov](https://codecov.io/gh/AnestLarry/AccountManagerWithFlask/branch/Ver_4.0.2/graph/badge.svg)](https://codecov.io/gh/AnestLarry/AccountManagerWithFlask)
+
+### 版本 4.0.2
 
 #### 此自述文件可能不适用新的提交，请注意ReadMe的版本。
 ### 说明
@@ -12,10 +14,10 @@
 
 #### 1.设置您的设置文件
 ##### 使用文本编辑器打开pjsetting.py并更改需要更改的变量。
-##### 示例：MyCode =“”“nR ^ K.Z'_mLLT＃XJSc <”“”
+##### 示例：MyCode ="""nR ^ K.Z'_mLLT＃XJSc <"""
 ##### 解释：
-1.“MyCode”随机种子
-2.“sqltype”sql类型，现在只支持“sqlite3”
+1."MyCode"随机种子
+2."sqltype"sql类型，现在只支持"sqlite3"
 ##### 或者您可以使用`run me at first.py`来完成您的设置文件。
 ##### `在first.py`中运行我可能在新提交中没用
 
@@ -32,7 +34,7 @@ ip：需要监听的（默认为127.0.0.1）
 port：需要监听的（默认为5000）
 ##### Linux：
 ###### 命令：python3 main.py ip port
-###### 示例：python main.py 127.0.0.1 5000
+###### 示例：python3 main.py 127.0.0.1 5000
 ###### 解释：
 ip：需要监听的（默认为127.0.0.1）
 port：需要监听的（默认为5000）

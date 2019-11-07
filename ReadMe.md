@@ -3,7 +3,9 @@
 
 * Page: <a href="ReadMe.md">English</a> <a href="ReadMeZh.md">中文</a>
 
-### Version 4.0
+[![LICENSE](https://img.shields.io/badge/License-Apache%20License%202.0-blue.svg)](LICENSE) [![codecov](https://codecov.io/gh/AnestLarry/AccountManagerWithFlask/branch/Ver_4.0.2/graph/badge.svg)](https://codecov.io/gh/AnestLarry/AccountManagerWithFlask)
+
+### Version 4.0.2
 
 #### This ReadMe might not apply the new commits , please noticed the Version of ReadMe.
 ### Description
@@ -33,7 +35,7 @@ ip : which was need listened to(default 127.0.0.1)
 port : which was need listened to(default 5000)
 ##### Linux:
 ###### Command : python3 main.py ip port
-###### Example : python main.py 127.0.0.1 5000
+###### Example : python3 main.py 127.0.0.1 5000
 ###### Explain:
 ip : which was need listened to(default 127.0.0.1)
 port : which was need listened to(default 5000)
