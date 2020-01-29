@@ -1,4 +1,4 @@
-from flask import Flask, request, url_for, render_template, Response
+from flask import Flask, request, url_for, render_template, Response,redirect
 import os
 import urllib.parse
 import sys
@@ -25,29 +25,36 @@ ch.setFormatter(formatter)
 log.addHandler(fhandler)
 log.addHandler(ch)
 
+@app.errorhandler(404)
+def index(e):
+    return redirect("/page/index")
 
-@app.route("/")
-def index():
-    if request.args.get("language", "") == "zh":
-        return render_template("index.html", language="zh")
-    else:
-        return render_template("index.html")
-
-
-@app.route("/search/")
-def search():
-    if request.args.get("language", "") == "zh":
-        return render_template("search.html", language="zh", position="search")
-    else:
-        return render_template("search.html", position="search")
-
-
-@app.route("/update/")
-def update():
-    if request.args.get("language", "") == "zh":
-        return render_template("update_page.html", language="zh", position="update")
-    else:
-        return render_template("update_page.html", position="update")
+@app.route("/page/<pagename>/", methods=["GET", "POST"])
+def Pages(pagename: str):
+    Language: str = request.args.get("language", "")
+    if pagename:
+        pagenames: dict[str, str] = {
+            "index": "index.html",
+            "search": "search.html",
+            "update": "update_page.html",
+            "Restore": "Restore.html",
+        }
+        if pagename in pagenames.keys():
+            if request.method == "POST" and pagename == "Restore":
+                upload_db = request.files["db_file"]
+                log.critical(
+                    "Backup is Uploaded! Uploaded's ip { %(address)s } " % {"address": request.remote_addr})
+                if os.path.exists("Database.db"):
+                    change_db_file_name()
+                upload_db.save("Database.db")
+                del upload_db
+                if Language == "zh":
+                    return render_template("Restore.html", position="Restore", language=Language, Status="上传文件成功!", Date=str(time.strftime(r"%Y-%m-%d--%H-%M-%S")))
+                else:
+                    return render_template("Restore.html", position="Restore", language=Language, Status="Uploaded file Success!", Date=str(time.strftime(r"%Y-%m-%d--%H-%M-%S")))
+            else:
+                return render_template(pagenames[pagename], language=Language, position=pagename)
+        return render_template("index.html", language=Language)
 
 
 @app.route("/getAccount/")
@@ -165,60 +172,24 @@ def Backup():
                                                                                          "attachment; filename="+str(time.strftime(r"%Y-%m-%d--%H-%M-%S")+".db")})
 
 
-@app.route("/Restore/", methods=["GET", "POST"])
-def Restore():
-    if request.method == "POST":
-        upload_db = request.files["db_file"]
-        log.critical(
-            "Backup is Uploaded! Uploaded's ip { "+request.remote_addr+" } ")
-        if os.path.exists("Database.db"):
-            change_db_file_name()
-        upload_db.save("Database.db")
-        del upload_db
-        return render_template("Restore.html", position="Restore", language=request.args.get("language", ""), Status="Uploaded file Success!", Date=str(time.strftime(r"%Y-%m-%d--%H-%M-%S")))
-    if request.args.get("language", "") == "zh":
-        return render_template("Restore.html", position="Restore", language="zh")
+@app.route("/static/<folder>/<filename>")
+def staticfile(folder: str, filename: str):
+    folder = urllib.parse.unquote(folder)
+    filename = urllib.parse.unquote(filename)
+    responses: dict[str, dict[str, dict[str, str]]] = {"js": {"mimetype": {"value": "application/x-javascript"}, "headers": {"Content-Type": "application/x-javascript"}},
+                                                       "css": {"mimetype": {"value": "text/css"}, "headers": {"Content-Type": "text/css"}},
+                                                       "img": {"mimetype": {"value": "application/octet-stream"}, "headers": {"Content-Type": "application/octet-stream"}}
+                                                       }
+    if folder in ("js", "css", "img") and os.path.exists("static/%(folder)s/%(filename)s" % {"folder": folder, "filename": filename}):
+        def getfiledata():
+            with open("static/%(folder)s/%(filename)s" % {"folder": folder, "filename": filename}, "rb") as f:
+                data = True
+                while data:
+                    data = f.read(1024*1)
+                    yield data
+        return Response(getfiledata(), mimetype=responses[folder]["mimetype"]["value"], headers=responses[folder]["headers"])
     else:
-        return render_template("Restore.html", position="Restore")
-
-
-@app.route("/static/js/<filename>")
-def jsfile(filename: str):
-    filename: str = urllib.parse.unquote(filename)
-    if os.path.exists("static/js/"+filename):
-        def getfiledata():
-            with open("static/js/"+filename, "rb") as js:
-                data = True
-                while data:
-                    data = js.read(1024*1)
-                    yield data
-        return Response(getfiledata(), mimetype="application/x-javascript", headers={"Content-Type": "application/x-javascript"})
-
-
-@app.route("/static/css/<filename>")
-def cssfile(filename: str):
-    filename: str = urllib.parse.unquote(filename)
-    if os.path.exists("static/css/"+filename):
-        def getfiledata():
-            with open("static/css/"+filename, "rb") as css:
-                data = True
-                while data:
-                    data = css.read(1024*1)
-                    yield data
-        return Response(getfiledata(), mimetype="text/css", headers={"Content-Type": "text/css"})
-
-
-@app.route("/static/img/<filename>")
-def imgfile(filename: str):
-    filename: str = urllib.parse.unquote(filename)
-    if os.path.exists("static/img/"+filename):
-        def getfiledata():
-            with open("static/img/"+filename, "rb") as img:
-                data = True
-                while data:
-                    data = img.read(1024*1)
-                    yield data
-        return Response(getfiledata(), mimetype="application/octet-stream", headers={"Content-Type": "application/octet-stream"})
+        return "404 Page Not Found.", 404
 
 
 def get_urls(varname: str) -> str:
