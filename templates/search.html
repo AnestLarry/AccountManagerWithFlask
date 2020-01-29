@@ -4,23 +4,18 @@
 		$(document).ready(function(){
 				$("#Search_button").click(function(){
 					alert('succ');
-					{% if language=="zh" %}
-					var result_language = "zh-cn";
-					{% else %}
-					var result_language = "en-us";
-					{% endif %}
 					switch( $("input[name='Search_select_button']:checked").val() ) {
 						case "0":
-							Searched_Item( $("input[name='Search_select_button']:checked").val() , $('#Search_Address').val() ,result_language);
+							Searched_Item( $("input[name='Search_select_button']:checked").val() , $('#Search_Address').val() ,s_vm.result_language);
 							break;
 						case "1":
-							Searched_Item( $("input[name='Search_select_button']:checked").val() , $('#Search_Account').val() ,result_language);
+							Searched_Item( $("input[name='Search_select_button']:checked").val() , $('#Search_Account').val() ,s_vm.result_language);
 							break;
 						case "2":
-							Searched_Item( $("input[name='Search_select_button']:checked").val() , $('#Search_Password').val() ,result_language);
+							Searched_Item( $("input[name='Search_select_button']:checked").val() , $('#Search_Password').val() ,s_vm.result_language);
 							break;
 						case "3":
-							Searched_Item( $("input[name='Search_select_button']:checked").val() , $('#Search_Text').val() ,result_language);
+							Searched_Item( $("input[name='Search_select_button']:checked").val() , $('#Search_Text').val() ,s_vm.result_language);
 							break;
 					}
 				})
@@ -35,81 +30,60 @@
 			})
 		}
 		</script>
+		<div id="SearchBody">
 		<hr>
-		{% if language=="zh" %}
-		<p align="center">搜索</p>
+		{% raw %}
+		<p align="center">{{labels[0]}}</p>
 		<hr>
 		<div id="search">
 			<div id="search-label-Address" style="width:45%;float:left;">
-				&emsp;&emsp;地址
+				&emsp;&emsp;{{labels[1]}}
 			</div>
 			<div id="search-choice-Address" style="width:45%;float:left;">
 				<input id="Search_Address" />&emsp;<input type="radio" id="Search_item" value="0" name="Search_select_button" checked>
 			</div>
 			<br><br>
 			<div id="search-label-Account" style="width:45%;float:left;">
-				&emsp;&emsp;账号
+				&emsp;&emsp;{{labels[2]}}
 			</div>
 			<div id="search-choice-Account" style="width:45%;float:left;">
 				<input id="Search_Account" />&emsp;<input type="radio" id="Search_item" value="1" name="Search_select_button">
 			</div>
 			<br><br>
 			<div id="search-label-Password" style="width:45%;float:left;">
-					&emsp;&emsp;密码
+					&emsp;&emsp;{{labels[3]}}
 			</div>
 			<div id="search-choice-Password" style="width:45%;float:left;">
 					<input id="Search_Password" />&emsp;<input type="radio" id="Search_item" value="2" name="Search_select_button">
 			</div>
 			<br><br>
 			<div id="search-label-Text" style="width:45%;float:left;">
-				&emsp;&emsp;标注
+				&emsp;&emsp;{{labels[4]}}
 			</div>
 			<div id="search-choice-Text" style="width:45%;float:left;">
 				<input id="Search_Text" />&emsp;<input type="radio" id="Search_item" value="3" name="Search_select_button">
 			</div>
 			<br><br>
-			<p align="center"><input type="button" id='Search_button' value="开始搜索"/></p>
+			<p align="center"><input type="button" id='Search_button' :value="labels[5]"/></p>
 			<br>
 		</div>
 		<hr>
-		<p align="center" id='Searched'>无</p>
-		{% else %}
-		<p align="center">Search</p>
-		<hr>
-		<div id="search">
-			<div id="search-label-Address" style="width:45%;float:left;">
-				&emsp;&emsp;Address
-			</div>
-			<div id="search-choice-Address" style="width:45%;float:left;">
-				<input id="Search_Address" />&emsp;<input type="radio" id="Search_item" value="0" name="Search_select_button" checked>
-			</div>
-			<br><br>
-			<div id="search-label-Account" style="width:45%;float:left;">
-				&emsp;&emsp;Account
-			</div>
-			<div id="search-choice-Account" style="width:45%;float:left;">
-				<input id="Search_Account" />&emsp;<input type="radio" id="Search_item" value="1" name="Search_select_button">
-			</div>
-			<br><br>
-			<div id="search-label-Password" style="width:45%;float:left;">
-					&emsp;&emsp;Password
-			</div>
-			<div id="search-choice-Password" style="width:45%;float:left;">
-					<input id="Search_Password" />&emsp;<input type="radio" id="Search_item" value="2" name="Search_select_button">
-			</div>
-			<br><br>
-			<div id="search-label-Text" style="width:45%;float:left;">
-				&emsp;&emsp;Text
-			</div>
-			<div id="search-choice-Text" style="width:45%;float:left;">
-				<input id="Search_Text" />&emsp;<input type="radio" id="Search_item" value="3" name="Search_select_button">
-			</div>
-			<br><br>
-			<p align="center"><input type="button" id='Search_button' value="Search"/></p>
-			<br>
-		</div>
-		<hr>
-		<p align="center" id='Searched'>None</p>
-		{% endif %}
+		<p align="center" id='Searched' v-once>{{ labels[6] }}</p>
+		{% endraw %}
+	</div>
+	<script>
+		var s_vm = new Vue({
+			el:"#SearchBody",
+			data:{
+		    {% if language=="zh" %}
+			labels:["搜索", "地址", "账号", "密码", "标注", "搜索","无"],
+			result_language: "zh-cn",
+			{% else %}
+			labels:["Search", "Address", "Account", "Password", "Text", "Search", "None"],
+			result_language: "en-us"
+			{% endif %}
+			}
+		})
+	</script>
 </body>
 </html>

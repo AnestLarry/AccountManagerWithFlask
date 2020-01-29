@@ -1,9 +1,9 @@
 <html>
 	{% include "nav.html" %}
-	<script>
+    <script>
 		$(document).ready(function(){
 			$("#Generate").click(function(){
-				Generate_Account();
+				Generate_Data();
 			})
 			$("#Save").click(function(){
 				switch( $("input[name='Password_Saveitem']:checked").val() ) {
@@ -23,17 +23,14 @@
 				}
 			})
 		});
-		function Generate_Account(){
+		function Generate_Data(){
 			if (!document.getElementById('Account_Key').checked){
 				$.get("{{get_urls('getAccount')}}",function(data){
 					Generate_AccountStr = data;
 					document.getElementById("Result_Account").value = Generate_AccountStr;
 				})
 			}
-			Generate_pw()
-		}
-		function Generate_pw(){
-				$.get("{{get_urls('getPW')}}",function(data){
+            $.get("{{get_urls('getPW')}}",function(data){
 					var jsons = JSON.parse(data);
 					document.getElementById("pw1").value = jsons["pw1"];
 				document.getElementById("pw2").value = jsons["pw2"];
@@ -51,125 +48,81 @@
 					password:sip,
 					Text:$('#text').val()
 				},function(data){
-					{% if language=="zh" %}
-					alert("成功");
-					{% else %}
-					alert("succ");
-					{% endif %}
+					alert(vm.alert_text);
 				})
 		}
     </script>
-	{% if language=="zh" %}
-	<hr><p align="center">生成结果 </p><hr><br>
-	{% else %}
-	<hr><p align="center"> Generated Result </p><hr><br>
-	{% endif %}
-	{% if language=="zh" %}
-	<div id="Generated_Result-div">
-		<div id="Generate-label-Address" style="width:45%;float:left;">
-			&emsp;&emsp;地址
-		</div>
-		<div id="Generate-input-Address" style="width:45%;float:left;">
-			<input id="Address" />
-		</div>
-		<br><br>
-		<div id="Generated_Result-label-Account" style="width:45%;float:left;">
-			&emsp;&emsp;账号
-		</div>
-		<div id="Generated_Result-input-Account" style="width:45%;float:left;">
-			<input id="Result_Account" />&emsp;固定&emsp;<input type='checkbox' id="Account_Key" />
-		</div>
-		<br><br>
-		<div id="Generated_Result-label-Password_lv1" style="width:45%;float:left;">
-			&emsp;&emsp;密码 lv 1
-		</div>
-		<div id="Generated_Result-input-Password_lv1" style="width:45%;float:left;">
-			<input id="pw1" />&emsp;<input type="radio" name="Password_Saveitem" value="1">
-		</div>
-		<br><br>
-		<div id="Generated_Result-label-Password_lv2" style="width:45%;float:left;">
-			&emsp;&emsp;密码 lv 2
-		</div>
-		<div id="Generated_Result-input-Password_lv2" style="width:45%;float:left;">
-			<input id="pw2" />&emsp;<input type="radio" name="Password_Saveitem" value="2">
-		</div>
-		<br><br>
-		<div id="Generated_Result-label-Password_lv3" style="width:45%;float:left;">
-			&emsp;&emsp;密码 lv 3
-		</div>
-		<div id="Generated_Result-input-Password_lv3" style="width:45%;float:left;">
-			<input id="pw3" />&emsp;<input type="radio" name="Password_Saveitem" value="3">
-		</div>
-		<br><br>
-		<div id="Generated_Result-label-Password_lvmax" style="width:45%;float:left;">
-			&emsp;&emsp;密码 lv max
-		</div>
-		<div id="Generated_Result-input-Password_lvmax" style="width:45%;float:left;">
-			<input id="pwmax" size="70"/>&emsp;<input type="radio" name="Password_Saveitem" value="max" checked>
-		</div>
-		<br><br>
-		<div id="Generated_Result-label-text" style="width:45%;float:left;">
-			&emsp;&emsp;标注
-		</div>
-		<div id="Generated_Result-input-text" style="width:45%;float:left;">
-			<input id="text" size="50"/>
-		</div>
-		<br><br>
-	</div>
-	<p align="center"><input type="button" id='Generate' value="生成">&emsp;&emsp; <input type="button" id='Save' value="保存结果"/></p>
-	{% else %}
-	<div id="Generated_Result-div">
-		<div id="Generate-label-Address" style="width:45%;float:left;">
-			&emsp;&emsp;Address
-		</div>
-		<div id="Generate-input-Address" style="width:45%;float:left;">
-			<input id="Address" />
-		</div>
-		<br><br>
-		<div id="Generated_Result-label-Account" style="width:45%;float:left;">
-			&emsp;&emsp;Account
-		</div>
-		<div id="Generated_Result-input-Account" style="width:45%;float:left;">
-			<input id="Result_Account" />&emsp;Fixed&emsp;<input type='checkbox' id="Account_Key" />
-		</div>
-		<br><br>
-		<div id="Generated_Result-label-Password_lv1" style="width:45%;float:left;">
-			&emsp;&emsp;Password lv 1
-		</div>
-		<div id="Generated_Result-input-Password_lv1" style="width:45%;float:left;">
-			<input id="pw1" />&emsp;<input type="radio" name="Password_Saveitem" value="1">
-		</div>
-		<br><br>
-		<div id="Generated_Result-label-Password_lv2" style="width:45%;float:left;">
-			&emsp;&emsp;Password lv 2
-		</div>
-		<div id="Generated_Result-input-Password_lv2" style="width:45%;float:left;">
-			<input id="pw2" />&emsp;<input type="radio" name="Password_Saveitem" value="2">
-		</div>
-		<br><br>
-		<div id="Generated_Result-label-Password_lv3" style="width:45%;float:left;">
-			&emsp;&emsp;Password lv 3
-		</div>
-		<div id="Generated_Result-input-Password_lv3" style="width:45%;float:left;">
-			<input id="pw3" />&emsp;<input type="radio" name="Password_Saveitem" value="3">
-		</div>
-		<br><br>
-		<div id="Generated_Result-label-Password_lvmax" style="width:45%;float:left;">
-			&emsp;&emsp;Password lv max
-		</div>
-		<div id="Generated_Result-input-Password_lvmax" style="width:45%;float:left;">
-			<input id="pwmax" size="70"/>&emsp;<input type="radio" name="Password_Saveitem" value="max" checked>
-		</div>
-		<br><br>
-		<div id="Generated_Result-label-text" style="width:45%;float:left;">
-			&emsp;&emsp;Text
-		</div>
-		<div id="Generated_Result-input-text" style="width:45%;float:left;">
-			<input id="text" size="50"/>
-		</div>
-		<br><br>
-	</div>
-	<p align="center"><input type="button" id='Generate' value="Generate">&emsp;&emsp; <input type="button" id='Save' value="Save Result"/></p>
-	{% endif %}
+    {% raw %}
+    <div id="IndexBody">
+        <div id="Generated_Result-div">
+            <hr><p align="center">{{ labels[0] }} </p><hr><br>
+            <div id="Generate-label-Address" style="width:45%;float:left;">
+                &emsp;&emsp;{{ labels[1] }}
+            </div>
+            <div id="Generate-input-Address" style="width:45%;float:left;">
+                <input id="Address" />
+            </div>
+            <br><br>
+            <div id="Generated_Result-label-Account" style="width:45%;float:left;">
+                &emsp;&emsp;{{ labels[2] }}
+            </div>
+            <div id="Generated_Result-input-Account" style="width:45%;float:left;">
+                <input id="Result_Account" />&emsp;{{ labels[3] }}&emsp;<input type='checkbox' id="Account_Key" />
+            </div>
+            <br><br>
+            <div id="Generated_Result-label-Password_lv1" style="width:45%;float:left;">
+                &emsp;&emsp;{{ labels[4] }}
+            </div>
+            <div id="Generated_Result-input-Password_lv1" style="width:45%;float:left;">
+                <input id="pw1" />&emsp;<input type="radio" name="Password_Saveitem" value="1">
+            </div>
+            <br><br>
+            <div id="Generated_Result-label-Password_lv2" style="width:45%;float:left;">
+                &emsp;&emsp;{{ labels[5] }}
+            </div>
+            <div id="Generated_Result-input-Password_lv2" style="width:45%;float:left;">
+                <input id="pw2" />&emsp;<input type="radio" name="Password_Saveitem" value="2">
+            </div>
+            <br><br>
+            <div id="Generated_Result-label-Password_lv3" style="width:45%;float:left;">
+                &emsp;&emsp;{{ labels[6] }}
+            </div>
+            <div id="Generated_Result-input-Password_lv3" style="width:45%;float:left;">
+                <input id="pw3" />&emsp;<input type="radio" name="Password_Saveitem" value="3">
+            </div>
+            <br><br>
+            <div id="Generated_Result-label-Password_lvmax" style="width:45%;float:left;">
+                &emsp;&emsp;{{ labels[7] }}
+            </div>
+            <div id="Generated_Result-input-Password_lvmax" style="width:45%;float:left;">
+                <input id="pwmax" size="70" />&emsp;<input type="radio" name="Password_Saveitem" value="max" checked>
+            </div>
+            <br><br>
+            <div id="Generated_Result-label-text" style="width:45%;float:left;">
+                &emsp;&emsp;{{ labels[8] }}
+            </div>
+            <div id="Generated_Result-input-text" style="width:45%;float:left;">
+                <input id="text" size="50" />
+            </div>
+            <br><br>
+            <p align="center"><input type="button" id='Generate' :value="labels[9]"/>&emsp;&emsp; <input type="button" id='Save' :value="labels[10]" /></p>
+        </div>
+    </div>
+    {% endraw %}
 </body>
+<script>
+    var i_vm = new Vue({
+        el: "#IndexBody",
+        data: {
+            i:0,
+            {% if language=="zh" %}
+            labels: ["生成结果", "地址", "账号", "固定", "密码 lv 1", "密码 lv 2", "密码 lv 3", "密码 lv Max", "标注", "生成","保存结果"],
+            alert_text:"成功"
+            {% else %}
+            labels: ["Generated Result", "Address", "Account", "Fixed", "Password lv 1", "Password lv 2", "Password lv 3", "Password lv Max", "Text", "Generate", "Save Result"],
+            alert_text:"Succ"
+            {% endif %}
+        }
+    })
+</script>
 </html>

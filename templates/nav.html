@@ -2,98 +2,104 @@
     <title>Account Manager</title>
 	<script src='/static/js/jquery-3.3.1.js'></script>
     <script src='/static/js/updatever.js'></script>
+    <script src='/static/js/vue.min.js'></script>
     <link href="/static/css/style.css" type="text/css" rel="stylesheet"/>
 </head>
 <body onload="updatever()">
-	<div id="Version-nav">
-        <div id="Version-label" style="width:45%;float:left;">
-            {% if language=="zh" %}
-            &emsp;&emsp;版本
-            {% else %}
-            &emsp;&emsp;Version
-            {% endif %}
-		</div>
-		<div id="Version-choice" style="width:45%;float:left;">
-			<span id="ver"></span>
-		</div>
-	</div>
-	<br><br>
-	<div id="language-nav">
-        <div id="language-label" style="width:45%;float:left;">
-            {% if language=="zh" %}
-            &emsp;&emsp;语言
-            {% else %}
-            &emsp;&emsp;Language
-            {% endif %}
-		</div>
-        <div id="language-choice" style="width:45%;float:left;">
-            {% if position=="search" %}
-            <a href="{{ get_urls('search') }}"><button>English</button></a>&emsp;&emsp;<a href="{{ get_urls('search_zh') }}"><button> 简体中文</button></a>
-            {% elif position == "update" %}
-            <a href="{{ get_urls('update') }}"><button>English</button></a>&emsp;&emsp;<a href="{{ get_urls('update_zh') }}"><button> 简体中文</button></a>
-            {% elif position == "Restore" %}
-            <a href="{{ get_urls('Restore') }}"><button>English</button></a>&emsp;&emsp;<a href="{{ get_urls('Restore_zh') }}"><button> 简体中文</button></a>
-            {% else %}
-            <a href="{{ get_urls('index') }}"><button>English</button></a>&emsp;&emsp;<a href="{{ get_urls('index_zh') }}"><button> 简体中文</button></a>
-            {% endif %}
-        </div>
-    </div>
-	<br><br>
-	<div id="function-nav" >
-        <div id="function-label" style="width:45%;float:left;">
-            {% if language=="zh" %}
-            &emsp;&emsp;功能
-            {% else %}
-            &emsp;&emsp;Function
-            {% endif %}
-        </div>
-        {% if language=="zh" %}
-        <div id="function-choice" style="width:45%;float:left;">
-			<a href="{{ get_urls('index_zh') }}"><button>生成器</button></a>&emsp;&emsp;<a href="{{get_urls('search_zh')}}"><button>搜索</button></a>&emsp;&emsp;<a href="{{get_urls('update_zh')}}"><button>更新</button></a>&emsp;&emsp;<a href="{{get_urls('Restore_zh')}}"><button>恢复</button></a>
-        </div>
-        {% else %}
-		<div id="function-choice" style="width:45%;float:left;">
-			<a href="{{ get_urls('index') }}"><button>Generation</button></a>&emsp;&emsp;<a href="{{get_urls('search')}}"><button>Search</button></a>&emsp;&emsp;<a href="{{get_urls('update')}}"><button>Update</button></a>&emsp;&emsp;<a href="{{get_urls('Restore')}}"><button>Restore</button></a>
-        </div>
-        {% endif %}
-	</div>
-    <br><br><hr>
-    {% if is_Login=="True" %}
-    <div id="login-nav">
-        <div id="login-account-label" style="width:45%;float:left;">
-            {% if language=="zh" %}
-            &emsp;&emsp;用户名
-            {% else %}
-            &emsp;&emsp;User's name
-            {% endif %}
-		</div>
-        <div id="login-account-div" style="width:45%;float:left;">
-            <span>{{login_username}}</span>&emsp;&emsp;<input type="button" value="Logout" id="login-button-logout"/>
-        </div>
-    </div>
-    {% else %}
-    <div id="login-nav">
-        <div id="login-account-label" style="width:45%;float:left;">
-            {% if language=="zh" %}
-            &emsp;&emsp;登录帐号
-            {% else %}
-            &emsp;&emsp;Login Account
-            {% endif %}
-		</div>
-        <div id="login-account-div" style="width:45%;float:left;">
-            <input type="text" id="login-account"/>
+    <div id="NavBody">
+        <div id="Version-nav">
+            {% raw %}
+            <div id="Version-label" style="width:45%;float:left;">
+                &emsp;&emsp;{{ labels[0] }} 
+            </div>
+            <div id="Version-choice" style="width:45%;float:left;">
+                <span id="ver"></span>
+            </div>
+            {% endraw %}
         </div>
         <br><br>
-        <div id="login-password-label" style="width:45%;float:left;">
-            {% if language=="zh" %}
-            &emsp;&emsp;登录密码
-            {% else %}
-            &emsp;&emsp;Login Password
-            {% endif %}
-		</div>
-        <div id="login-password-div" style="width:45%;float:left;">
-            <input type="password" id="login-password"/>
+        <div id="language-nav">
+            <div id="language-label" style="width:45%;float:left;">
+                {% raw %}
+                <div id="language-label" style="width:45%;float:left;">
+                    &emsp;&emsp;{{labels[1]}}
+                </div>
+                {% endraw %}
+            </div>
+            <div id="language-choice" style="width:45%;float:left;">
+                {% if position=="search" %}
+                <a href="{{ get_urls('search') }}"><button>English</button></a>&emsp;&emsp;<a href="{{ get_urls('search_zh') }}"><button> 简体中文</button></a>
+                {% elif position == "update" %}
+                <a href="{{ get_urls('update') }}"><button>English</button></a>&emsp;&emsp;<a href="{{ get_urls('update_zh') }}"><button> 简体中文</button></a>
+                {% elif position == "Restore" %}
+                <a href="{{ get_urls('Restore') }}"><button>English</button></a>&emsp;&emsp;<a href="{{ get_urls('Restore_zh') }}"><button> 简体中文</button></a>
+                {% else %}
+                <a href="{{ get_urls('index') }}"><button>English</button></a>&emsp;&emsp;<a href="{{ get_urls('index_zh') }}"><button> 简体中文</button></a>
+                {% endif %}
+            </div>
         </div>
-        <br><br><p align="center"><input type="button" value="{% if language=='zh' %}登录{% else %}Login{% endif %}" id="login-button-login"/></p>
-    {% endif %}
-	</div>
+        <br><br>
+        <div id="function-nav" >
+            <div id="function-label" style="width:45%;float:left;">
+                {% if language=="zh" %}
+                &emsp;&emsp;功能
+                {% else %}
+                &emsp;&emsp;Function
+                {% endif %}
+            </div>
+            {% if language=="zh" %}
+            <div id="function-choice" style="width:45%;float:left;">
+                <a href="{{ get_urls('index_zh') }}"><button>生成器</button></a>&emsp;&emsp;<a href="{{get_urls('search_zh')}}"><button>搜索</button></a>&emsp;&emsp;<a href="{{get_urls('update_zh')}}"><button>更新</button></a>&emsp;&emsp;<a href="{{get_urls('Restore_zh')}}"><button>恢复</button></a>
+            </div>
+            {% else %}
+            <div id="function-choice" style="width:45%;float:left;">
+                <a href="{{ get_urls('index') }}"><button>Generation</button></a>&emsp;&emsp;<a href="{{get_urls('search')}}"><button>Search</button></a>&emsp;&emsp;<a href="{{get_urls('update')}}"><button>Update</button></a>&emsp;&emsp;<a href="{{get_urls('Restore')}}"><button>Restore</button></a>
+            </div>
+            {% endif %}
+        </div>
+        <br><br><hr>
+        {% if is_Login=="True" %}
+        <div id="login-nav">
+            <div id="login-account-label" style="width:45%;float:left;">
+                {% if language=="zh" %}
+                &emsp;&emsp;用户名
+                {% else %}
+                &emsp;&emsp;User's name
+                {% endif %}
+            </div>
+            <div id="login-account-div" style="width:45%;float:left;">
+                <span>{{login_username}}</span>&emsp;&emsp;<input type="button" value="Logout" id="login-button-logout"/>
+            </div>
+        </div>
+        {% else %}{% raw %}
+        <div id="login-nav">
+            <div id="login-account-label" style="width:45%;float:left;">
+                &emsp;&emsp;{{ labels[3] }}
+            </div>
+            <div id="login-account-div" style="width:45%;float:left;">
+                <input type="text" id="login-account" />
+            </div>
+            <br><br>
+            <div id="login-password-label" style="width:45%;float:left;">
+                &emsp;&emsp;{{ labels[4] }}
+            </div>
+            <div id="login-password-div" style="width:45%;float:left;">
+                <input type="password" id="login-password" />
+            </div>
+            <br><br>
+            <p align="center"><input type="button" :value="labels[5]" id="login-button-login" /></p>{% endraw %}
+        {% endif %}
+        </div>
+    </div>
+    <script>
+        var n_vm = new Vue({
+            el:"#NavBody",
+            data:{
+                {% if language=="zh" %}
+                labels:["版本", "语言", "", "登录帐号", "登录密码", "登录"],
+                {% else %}
+                labels:["Version", "Language", "", "Login Account" ,"Login Password" ,"Login"],
+                {% endif %}
+            }
+        })
+    </script>
