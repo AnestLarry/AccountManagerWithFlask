@@ -9,6 +9,7 @@ import logging
 import amf_globals
 import encrypt
 import pjsql
+import json
 app: Flask = Flask(__name__)
 
 log = logging.getLogger(__name__)
@@ -104,7 +105,7 @@ def Save_Result_to_sql():
 @app.route("/Search_item", methods=["POST"])
 def Search_item():
     try:
-        if request.form['key'] and request.form["keyword"] and request.form['language']:
+        if request.form['key'] and request.form["keyword"]:
             keyword = base64.b64encode(
                 request.form["keyword"].encode()).decode()
             key: str = request.form['key']
@@ -124,10 +125,10 @@ def Search_item():
                         " } Class { " + KeyMode_Str + " }")
 
             sql: manage_sql = pjsql.manage_sql()
-            result: str = sql.Search_Item(
-                KeyMode_Str, keyword, request.form['language']) + "<br>Search Time:" + time.strftime("%Y-%m-%d-%H-%M-%S")
+            result: list = sql.Search_Item(
+                KeyMode_Str, keyword) + [[time.strftime("%Y-%m-%d-%H-%M-%S")]]
             del sql
-            return result, 200
+            return json.dumps(result), 200
     except IOError:
         return "400 Bad Request", 400
 

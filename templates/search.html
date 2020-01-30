@@ -26,7 +26,11 @@
 				keyword:keyword,
 				language:give_language
 			},function(data){
-				document.getElementById('Searched').innerHTML = data;
+				var temp = $.parseJSON(data);
+				s_vm.IsSearched = true;
+				s_vm.searched_date = temp[temp.length-1][0];
+				temp.splice(temp.length-1,1);
+				s_vm.searched_data = temp;
 			})
 		}
 		</script>
@@ -68,7 +72,12 @@
 			<br>
 		</div>
 		<hr>
-		<p align="center" id='Searched' v-once>{{ labels[6] }}</p>
+		<div align="center" v-if="IsSearched" v-for="item in searched_data">
+			<table border="1" ><font size=5>
+				<tr v-for="i in item.length"><td>{{ searched_data_labels[i-1] }}</td><td><input readonly style="width:250px" onfocus="this.select()" :value="item[i-1]"/></td></tr><br>
+			</font></table>
+		</div>
+		<p align="center" v-show="IsSearched" style="float: center;">{{ searched_data_labels[5] }}:{{ searched_date }}</p>
 		{% endraw %}
 	</div>
 	<script>
@@ -78,10 +87,15 @@
 		    {% if language=="zh" %}
 			labels:["搜索", "地址", "账号", "密码", "标注", "搜索","无"],
 			result_language: "zh-cn",
+			searched_data_labels:["地址", "账号", "密码", "日期", "标注", "搜索时间"],
 			{% else %}
 			labels:["Search", "Address", "Account", "Password", "Text", "Search", "None"],
-			result_language: "en-us"
+			result_language: "en-us",
+			searched_data_labels:["Address", "Account", "Password", "Date", "Text", "Search Time"],
 			{% endif %}
+			IsSearched:false,
+			searched_data:[[],],
+			searched_date:"",
 			}
 		})
 	</script>
