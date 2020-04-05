@@ -4,8 +4,7 @@ import time
 
 
 class manage_sql:
-    def __init__(self, sqlname: str = "sqlite3", file: str = "Database.db"):
-        self.__sqltype: str = sqlname
+    def __init__(self, file: str = "Database.db"):
         self.__conn = sqlite3.connect('Database.db')
         self.__c = self.__conn.cursor()
 
@@ -50,7 +49,7 @@ class manage_sql:
     def Backup_Database(self):
         def getfiledata():
             with open("Database.db", "rb") as img:
-                data = True
+                data = b"1"
                 while data:
                     data = img.read(1024*1)
                     yield data
