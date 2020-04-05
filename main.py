@@ -1,4 +1,4 @@
-from flask import Flask, request, url_for, render_template, Response,redirect
+from flask import Flask, request, url_for, render_template, Response, redirect
 import os
 import urllib.parse
 import sys
@@ -26,9 +26,11 @@ ch.setFormatter(formatter)
 log.addHandler(fhandler)
 log.addHandler(ch)
 
+
 @app.errorhandler(404)
 def index(e):
     return redirect("/page/index")
+
 
 @app.route("/page/<pagename>/", methods=["GET", "POST"])
 def Pages(pagename: str):
@@ -146,7 +148,7 @@ def Update_Text():
             sql: manage_sql = pjsql.manage_sql()
             sql.Update_Text(DateStr, TextStr)
             del sql
-            return "Succ", 200
+            return time.strftime("%Y-%m-%d--%H-%M-%S"), 200
     except:
         return "400 Bad Request", 400
 
@@ -159,7 +161,7 @@ def Delete(Date: str):
             sql: manage_sql = pjsql.manage_sql()
             log.warning(sql.Delete_Item(Date))
             del sql
-            return "Succ", 200
+            return time.strftime("%Y-%m-%d--%H-%M-%S"), 200
     except:
         return "400 Bad Request", 400
 
