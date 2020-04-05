@@ -26,10 +26,10 @@ class manage_sql:
     def Search_Item(self, key: str, keywordStr: str) -> list:
         if key == "Text":
             self.__c.execute(
-                r"select Address,Account,Password,Date,Text from Data where Text LIKE ?;", ("%{}%".format(keywordStr),))
+                r"select Address,Account,Password,Date,Text from Data where Text LIKE ? ORDER BY Date DESC;", ("%{}%".format(keywordStr),))
         else:
             self.__c.execute(
-                'select Address,Account,Password,Date,Text from Data where {} = ?;'.format(key), (keywordStr,))
+                'select Address,Account,Password,Date,Text from Data where {} = ? ORDER BY Date DESC;'.format(key), (keywordStr,))
 
         result_List: list = []
         for Item in self.__c.fetchall():
