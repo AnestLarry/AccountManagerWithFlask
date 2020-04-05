@@ -3,14 +3,6 @@ import base64
 import time
 
 
-class initsql:
-    def __init__(self, sqlname: str):
-        if sqlname == "sqlite3":
-            self.sqltype = "sqlite3"
-        elif sqlname == "mysql":
-            self.sqltype = "mysql"
-
-
 class manage_sql:
     def __init__(self, sqlname: str = "sqlite3", file: str = "Database.db"):
         self.__sqltype: str = sqlname
