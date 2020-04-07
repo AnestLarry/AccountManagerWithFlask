@@ -1,65 +1,57 @@
 <html>
 {% include "nav.html" %}
-	<script>
-		$(document).ready(function(){
-				$("#Update_button").click(function(){
-					Update_Item( $("#Update_Date").val() , $("#Update_Text").val())
+	<div id="UpdateBody">
+		<script>
+			$(document).ready(function(){
+					$("#Update_button").click(function(){
+						Update_Item( $("#Update_Date").val() , $("#Update_Text").val())
+					})
 				})
-			})
-		function Update_Item(Date,Text){
-			$.post("{{ get_urls('Update_Text') }}",{
-				DateStr:Date,
-				TextStr:Text
-			},function(data){
-				{% if language=="zh" %}
-				alert("成功");
-				{% else %}
-				alert("succ");
-				{% endif %}
-			})
-		}
-		</script>
-	<hr>
-	{% if language=="zh" %}
-	<p align="center">更新标注</p>
-	<hr>
-	<div id="Update">
-		<div id="update-label-date" style="width:45%;float:left;">
-			&emsp;&emsp;日期
-		</div>
-		<div id="update-choice-date" style="width:45%;float:left;">
-				<input id="Update_Date" />
-		</div>
-		<br><br>
-		<div id="update-label-text" style="width:45%;float:left;">
-				&emsp;&emsp;标注
+			function Update_Item(Date,Text){
+				$.post("{{ get_urls('Update_Text') }}",{
+					DateStr:Date,
+					TextStr:Text
+				},function(data){
+					alert(u_vm.alert_text);
+				})
+			}
+			</script>
+		<hr>
+		{% raw %}
+		<p align="center">Update Text</p>
+		<hr>
+		<div id="Update">
+			<div id="update-label-date" style="width:45%;float:left;">
+				&emsp;&emsp;Date
+			</div>
+			<div id="update-choice-date" style="width:45%;float:left;">
+					<input id="Update_Date" />
+			</div>
+			<br><br>
+			<div id="update-label-text" style="width:45%;float:left;">
+				&emsp;&emsp;Text
 			</div>
 			<div id="update-choice-text" style="width:45%;float:left;">
 					<input id="Update_Text" />
 			</div>
+		</div>
+		<br>
+		<p align="center"><input type="button" id='Update_button' value="Update"/></p>
+		{% endraw %}
 	</div>
-	<br>
-	<p align="center"><input type="button" id='Update_button' value="更新"/></p>
-	{% else %}
-	<p align="center">Update Text</p>
-	<hr>
-	<div id="Update">
-		<div id="update-label-date" style="width:45%;float:left;">
-			&emsp;&emsp;Date
-		</div>
-		<div id="update-choice-date" style="width:45%;float:left;">
-				<input id="Update_Date" />
-		</div>
-		<br><br>
-		<div id="update-label-text" style="width:45%;float:left;">
-			&emsp;&emsp;Text
-		</div>
-		<div id="update-choice-text" style="width:45%;float:left;">
-				<input id="Update_Text" />
-		</div>
-	</div>
-	<br>
-	<p align="center"><input type="button" id='Update_button' value="Update"/></p>
-	{% endif %}
+	<script>
+	var u_vm = new Vue({
+		el:"#UpdateBody",
+		data:{
+			{% if language=="zh" %}
+			labels:["更新标注", "日期", "标注","更新"],
+			alert_text:"成功",
+			{% else %}
+			labels:["Update Text", "Date", "Text", "Update"],
+			alert_text:"Succ",
+			{% endif %}
+		}
+	})
+	</script>
 </body>
 </html>
