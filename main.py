@@ -145,7 +145,6 @@ def Delete(Date: str):
     try:
         if Date:
             Date = base64.b64encode(Date.encode()).decode()
-
             sql = manage_sql()
             log.warning(sql.Delete_Item(Date))
             del sql
@@ -179,7 +178,10 @@ def staticfile(folder: str, filename: str):
                 while data:
                     data = f.read(1024*1)
                     yield data
-        return Response(getfiledata(), mimetype=responses[folder]["mimetype"]["value"], headers=responses[folder]["headers"])
+        resp = Response(getfiledata(
+        ), mimetype=responses[folder]["mimetype"]["value"], headers=responses[folder]["headers"])
+        resp.headers["cache-control"] = "max-age=3600;"
+        return resp
     else:
         return "404 Page Not Found.", 404
 
