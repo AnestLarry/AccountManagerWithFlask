@@ -1,39 +1,38 @@
-<html>
-{% include "nav.html" %}
-	<div id="ResBody">
-		<hr>{% raw %}
-		<p align="center">{{ labels[0] }}</p>
-		<hr>
-		<div id="Restore">
-			<div id="Restore-label" style="width:45%;float:left;">
-				&emsp;&emsp;{{ labels[1] }}
-			</div>
-			<div id="Restore-choice-file" style="width:45%;float:left;">
-				<form method="POST" enctype="multipart/form-data">
-					<input type="file" name="db_file">
-					<input type="submit" :value="labels[2]">
-					<input name="language" style="display:none;" value=""/>
+{% extends "base.html" %}
+{% block body %}
+<div id="ResBody">
+	<hr>{% raw %}
+	<p align="center">{{ labels[0] }}</p>
+	<hr>
+	<div id="Restore">
+		<div id="Restore-label" style="width:45%;float:left;">
+			&emsp;&emsp;{{ labels[1] }}
+		</div>
+		<div id="Restore-choice-file" style="width:45%;float:left;">
+			<form method="POST" enctype="multipart/form-data">
+				<input type="file" name="db_file">
+				<input type="submit" :value="labels[2]">
+				<input name="language" style="display:none;" value="" />
 			</form>
-			</div>
-			<p align="center" id=Status></p>
 		</div>
-		{% endraw %}
-		<div id="Restore-Status" style="width:85%;float:left;">
-			<p align='center'>{{ Status }}</p>
-			<p align='center'>{{ Date }}</p>
-		</div>
+		<p align="center" id="Status"></p>
 	</div>
-	<script>
-		var r_vm = new Vue({
-			el:"#ResBody",
-			data:{
-			{% if language=="zh" %}
-			labels:["恢复", "文件", "上传"],
-			{% else %}
-			labels:["Restore", "File", "Upload"],
-			{% endif %}
+	{% endraw %}
+	<div id="Restore-Status" style="width:85%;float:left;">
+		<p align='center'>{{ Status }}</p>
+		<p align='center'>{{ Date }}</p>
+	</div>
+</div>
+<script>
+	var r_vm = new Vue({
+		el: "#ResBody",
+		data: {
+			{% if language == "zh" %}
+	labels: ["恢复", "文件", "上传"],
+		{% else %}
+	labels: ["Restore", "File", "Upload"],
+		{% endif %}
 			}
 		})
-	</script>
-</body>
-</html>
+</script>
+{% endblock %}
