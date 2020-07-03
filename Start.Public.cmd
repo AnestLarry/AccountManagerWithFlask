@@ -1,1 +1,1 @@
-python main.py 0.0.0.0 8000
+python main.py 0.0.0.0 5000
