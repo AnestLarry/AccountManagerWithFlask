@@ -36,7 +36,7 @@
 		</div>
 	</div>
 	<br>
-	<p align="center"><input type="button" id='Update_button' value="{{labels[3]}}" /></p>
+	<p align="center"><input type="button" id='Update_button'/></p>
 	{% endraw %}
 </div>
 <script>
@@ -52,5 +52,6 @@
 			{% endif %}
 		}
 	})
+	document.getElementById("Update_button").value = u_vm.labels[3];
 </script>
 {% endblock %}
