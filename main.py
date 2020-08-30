@@ -100,7 +100,7 @@ def Save_Result_to_sql():
 @app.route("/Search_item", methods=["POST"])
 def Search_item():
     try:
-        if request.form['key'] and request.form["keyword"]:
+        if request.form.get("key", "") and request.form.get("keyword", ""):
             keyword = base64.b64encode(
                 request.form["keyword"].encode()).decode()
             key: str = request.form['key']
@@ -119,6 +119,8 @@ def Search_item():
                 KeyMode_Str, keyword) + [[time.strftime("%Y-%m-%d-%H-%M-%S")]]
             del sql
             return json.dumps(result), 200
+        else:
+            return json.dumps({"code": "500", "message": "argv error"}), 500
     except IOError:
         return "400 Bad Request 2", 400
 
