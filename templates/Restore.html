@@ -2,16 +2,16 @@
 {% block body %}
 <div id="ResBody">
 	<hr>{% raw %}
-	<p align="center">{{ labels[0] }}</p>
+	<p align="center">{{ labels["Restore"] }}</p>
 	<hr>
 	<div id="Restore">
 		<div id="Restore-label" style="width:45%;float:left;">
-			&emsp;&emsp;{{ labels[1] }}
+			&emsp;&emsp;{{ labels["File"] }}
 		</div>
 		<div id="Restore-choice-file" style="width:45%;float:left;">
 			<form method="POST" enctype="multipart/form-data">
 				<input type="file" name="db_file">
-				<input type="submit" :value="labels[2]">
+				<input type="submit" :value="labels['Upload']">
 				<input name="language" style="display:none;" value="" />
 			</form>
 		</div>
@@ -27,12 +27,9 @@
 	var r_vm = new Vue({
 		el: "#ResBody",
 		data: {
-			{% if language == "zh" %}
-	labels: ["恢复", "文件", "上传"],
-		{% else %}
-	labels: ["Restore", "File", "Upload"],
-		{% endif %}
-			}
-		})
+			labels: language_dict
+		}
+	})
+	vms.push(r_vm);
 </script>
 {% endblock %}

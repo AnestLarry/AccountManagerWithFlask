@@ -54,59 +54,61 @@
 <div id="IndexBody">
     <div id="Generated_Result-div">
         <hr>
-        <p align="center">{{ labels[0] }} </p>
+        <p align="center">{{ labels["Generated Result"] }} </p>
         <hr><br>
         <div id="Generate-label-Address" style="width:45%;float:left;">
-            &emsp;&emsp;{{ labels[1] }}
+            &emsp;&emsp;{{ labels["Address"] }}
         </div>
         <div id="Generate-input-Address" style="width:45%;float:left;">
             <input id="Address" />
         </div>
         <br><br>
         <div id="Generated_Result-label-Account" style="width:45%;float:left;">
-            &emsp;&emsp;{{ labels[2] }}
+            &emsp;&emsp;{{ labels["Account"] }}
         </div>
         <div id="Generated_Result-input-Account" style="width:45%;float:left;">
-            <input id="Result_Account" />&emsp;{{ labels[3] }}&emsp;<input type='checkbox' id="Account_Key" />
+            <input id="Result_Account" />&emsp;{{ labels["Fixed"] }}&emsp;<input type='checkbox' id="Account_Key" />
         </div>
         <br><br>
         <div id="Generated_Result-label-Password_lv1" style="width:45%;float:left;">
-            &emsp;&emsp;{{ labels[4] }}
+            &emsp;&emsp;{{ labels["Password"] }} lv 1
         </div>
         <div id="Generated_Result-input-Password_lv1" style="width:45%;float:left;">
             <input id="pw1" />&emsp;<input type="radio" name="Password_Saveitem" value="1">
         </div>
         <br><br>
         <div id="Generated_Result-label-Password_lv2" style="width:45%;float:left;">
-            &emsp;&emsp;{{ labels[5] }}
+            &emsp;&emsp;{{ labels["Password"] }} lv 2
         </div>
         <div id="Generated_Result-input-Password_lv2" style="width:45%;float:left;">
             <input id="pw2" />&emsp;<input type="radio" name="Password_Saveitem" value="2">
         </div>
         <br><br>
         <div id="Generated_Result-label-Password_lv3" style="width:45%;float:left;">
-            &emsp;&emsp;{{ labels[6] }}
+            &emsp;&emsp;{{ labels["Password"] }} lv 3
         </div>
         <div id="Generated_Result-input-Password_lv3" style="width:45%;float:left;">
             <input id="pw3" />&emsp;<input type="radio" name="Password_Saveitem" value="3">
         </div>
         <br><br>
         <div id="Generated_Result-label-Password_lvmax" style="width:45%;float:left;">
-            &emsp;&emsp;{{ labels[7] }}
+            &emsp;&emsp;{{ labels["Password"] }} lv max
         </div>
         <div id="Generated_Result-input-Password_lvmax" style="width:45%;float:left;">
             <input id="pwmax" size="70" />&emsp;<input type="radio" name="Password_Saveitem" value="max" checked>
         </div>
         <br><br>
         <div id="Generated_Result-label-text" style="width:45%;float:left;">
-            &emsp;&emsp;{{ labels[8] }}
+            &emsp;&emsp;{{ labels["Text"] }}
         </div>
         <div id="Generated_Result-input-text" style="width:45%;float:left;">
             <input id="text" size="50" />
         </div>
         <br><br>
-        <p align="center"><input type="button" id='Generate' :value="labels[9]" />&emsp;&emsp; <input type="button"
-                id='Save' :value="labels[10]" /></p>
+        <p align="center">
+            <input type="button" id='Generate' :value="labels['Generate']" />&emsp;&emsp;
+            <input type="button" id='Save' :value="labels['Save Result']" />
+        </p>
     </div>
 </div>
 {% endraw %}
@@ -115,14 +117,10 @@
         el: "#IndexBody",
         data: {
             i: 0,
-            {% if language == "zh" %}
-    labels: ["生成结果", "地址", "账号", "固定", "密码 lv 1", "密码 lv 2", "密码 lv 3", "密码 lv Max", "标注", "生成", "保存结果"],
-        alert_text: "成功"
-    {% else %}
-    labels: ["Generated Result", "Address", "Account", "Fixed", "Password lv 1", "Password lv 2", "Password lv 3", "Password lv Max", "Text", "Generate", "Save Result"],
-        alert_text: "Succ"
-    {% endif %}
+            labels: language_dict,
+            alert_text: language_dict["Succ"]
         }
     })
+    vms.push(i_vm);
 </script>
 {% endblock %}
