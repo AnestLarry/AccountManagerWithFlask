@@ -46,10 +46,7 @@ def Pages(pagename: str):
                     change_db_file_name()
                 upload_db.save("Database.db")
                 del upload_db
-                if Language == "zh":
-                    return render_template("Restore.html", position="Restore", language=Language, Status="上传文件成功!", Date=str(time.strftime(r"%Y-%m-%d--%H-%M-%S")))
-                else:
-                    return render_template("Restore.html", position="Restore", language=Language, Status="Uploaded file Success!", Date=str(time.strftime(r"%Y-%m-%d--%H-%M-%S")))
+                return render_template("Restore.html", position="Restore", language=Language, Status="Uploaded file Success!", Date=str(time.strftime(r"%Y-%m-%d--%H-%M-%S")))
             else:
                 return render_template(PS.pageNames[pagename], language=Language, position=pagename)
         return render_template("index.html", language=Language)
@@ -160,8 +157,7 @@ def Backup():
     log.critical("Backup is Downloaded! Downloader's ip { %s } " % (
         request.remote_addr,))
     sql = manage_sql()
-    return Response(sql.Backup_Database(), mimetype="application/octet-stream", headers={"Content-Type": "application/octet-stream", "Content-disposition":
-                                                                                         "attachment; filename="+str(time.strftime(r"%Y-%m-%d--%H-%M-%S")+".db")})
+    return Response(sql.Backup_Database(), mimetype="application/octet-stream", headers={"Content-Type": "application/octet-stream", "Content-disposition": "attachment; filename="+str(time.strftime(r"%Y-%m-%d--%H-%M-%S")+".db")})
 
 
 @app.route("/static/<folder>/<filename>")

@@ -5,7 +5,7 @@ import time
 
 class manage_sql:
     def __init__(self, file: str = "Database.db"):
-        self.__conn = sqlite3.connect('Database.db')
+        self.__conn = sqlite3.connect(file)
         self.__c = self.__conn.cursor()
 
     def Save_Result_to_sql(self, AddressStr: str, AccountStr: str, password: str, Text: str) -> bool:
