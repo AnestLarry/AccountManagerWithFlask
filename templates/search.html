@@ -1,122 +1,112 @@
-{% extends "base.html" %}
-{% block head %}
+{% extends "base.html" %} {% block head %}
 <script>
-	$(document).ready(function () {
-		$("#Search_button").click(function () {
-			alert('succ');
-			var t = $("input[name='Search_select_button']:checked").val();
-			var d = {
-				"0": $('#Search_Address').val(),
-				"1": $('#Search_Account').val(),
-				"2": $('#Search_Password').val(),
-				"3": $('#Search_Text').val()
-			};
-			Searched_Item(t, d[t], s_vm.result_language);
-		})
-	})
-	function Searched_Item(key, keyword, give_language) {
-		$.post("{{ get_urls('Search_item') }}", {
-			key: key,
-			keyword: keyword,
-			language: give_language
-		}, function (data) {
-			var temp = $.parseJSON(data);
-			s_vm.IsSearched = true;
-			s_vm.searched_date = temp[temp.length - 1][0];
-			temp.splice(temp.length - 1, 1);
-			s_vm.searched_data = temp;
-		})
-	}
+    $(document).ready(function() {
+        $("#Search_button").click(function() {
+            alert('succ');
+            var t = $("input[name='Search_select_button']:checked").val();
+            var d = {
+                "0": $('#Search_Address').val(),
+                "1": $('#Search_Account').val(),
+                "2": $('#Search_Password').val(),
+                "3": $('#Search_Text').val()
+            };
+            Searched_Item(t, d[t], s_vm.result_language);
+        })
+    })
+
+    function Searched_Item(key, keyword, give_language) {
+        $.post("{{ get_urls('Search_item') }}", {
+            key: key,
+            keyword: keyword,
+            language: give_language
+        }, function(data) {
+            var temp = $.parseJSON(data);
+            s_vm.IsSearched = true;
+            s_vm.searched_date = temp[temp.length - 1][0];
+            temp.splice(temp.length - 1, 1);
+            s_vm.searched_data = temp;
+        })
+    }
 </script>
 <style>
-	.searchData input {
-		border: none;
-		outline: none;
-	}
+    .searchData input {
+        border: none;
+        outline: none;
+    }
 </style>
-{% endblock %}
-{% block body %}
+{% endblock %} {% block body %}
 <div id="SearchBody">
-	<hr>
-	{% raw %}
-	<p align="center">{{labels["Search"]}}</p>
-	<hr>
-	<div id="search">
-		<div id="search-label-Address" style="width:45%;float:left;">
-			&emsp;&emsp;{{labels["Address"]}}
-		</div>
-		<div id="search-choice-Address" style="width:45%;float:left;">
-			<input id="Search_Address" />&emsp;<input type="radio" id="Search_item" value="0"
-				name="Search_select_button" checked>
-		</div>
-		<br><br>
-		<div id="search-label-Account" style="width:45%;float:left;">
-			&emsp;&emsp;{{labels["Account"]}}
-		</div>
-		<div id="search-choice-Account" style="width:45%;float:left;">
-			<input id="Search_Account" />&emsp;<input type="radio" id="Search_item" value="1"
-				name="Search_select_button">
-		</div>
-		<br><br>
-		<div id="search-label-Password" style="width:45%;float:left;">
-			&emsp;&emsp;{{labels["Password"]}}
-		</div>
-		<div id="search-choice-Password" style="width:45%;float:left;">
-			<input id="Search_Password" />&emsp;<input type="radio" id="Search_item" value="2"
-				name="Search_select_button">
-		</div>
-		<br><br>
-		<div id="search-label-Text" style="width:45%;float:left;">
-			&emsp;&emsp;{{labels["Text"]}}
-		</div>
-		<div id="search-choice-Text" style="width:45%;float:left;">
-			<input id="Search_Text" />&emsp;<input type="radio" id="Search_item" value="3" name="Search_select_button">
-		</div>
-		<br><br>
-		<p align="center"><input type="button" id='Search_button' :value="labels['Search']" /></p>
-		<br>
-	</div>
-	<hr>
-	<div align="center" v-if="IsSearched" v-for="item in searched_data" class="searchData">
-		<table border="1">
-			<font size=5>
-				<tr>
-					<td>{{labels["Address"]}}</td>
-					<td><input readonly style="width:250px" onfocus="this.select()" :value="item[0]" /></td>
-				</tr>
-				<tr>
-					<td>{{labels["Account"]}}</td>
-					<td><input readonly style="width:250px" onfocus="this.select()" :value="item[1]" /></td>
-				</tr>
-				<tr>
-					<td>{{labels["Password"]}}</td>
-					<td><input readonly style="width:250px" onfocus="this.select()" :value="item[2]" /></td>
-				</tr>
-				<tr>
-					<td>{{labels["Date"]}}</td>
-					<td><input readonly style="width:250px" onfocus="this.select()" :value="item[3]" /></td>
-				</tr>
-				<tr>
-					<td>{{labels["Text"]}}</td>
-					<td><input readonly style="width:250px" onfocus="this.select()" :value="item[4]" /></td>
-				</tr>
-			</font>
-		</table><br>
-	</div>
-	<p align="center" v-show="IsSearched" style="float: center;">{{ labels["Search Time"] }}:{{ searched_date }}</p>
-	{% endraw %}
+    {% raw %}
+    <table class="table table-condensed">
+        <tr class="active">
+            <td colspan=2>{{labels["Search"]}}</td>
+        </tr>
+        <tr>
+            <td><label for="Search_Address">{{labels["Address"]}}</label></td>
+            <td><input id="Search_Address" class="form-control" /></td>
+            <td><input type="radio" id="Search_item" value="0" name="Search_select_button" class="btn btn-md" checked /></td>
+        </tr>
+        <tr>
+            <td><label for="Search_Account">{{labels["Account"]}}</label></td>
+            <td><input id="Search_Account" class="form-control" /></td>
+            <td><input type="radio" id="Search_item" value="1" name="Search_select_button" class="btn btn-md" /></td>
+        </tr>
+        <tr>
+            <td><label for="Search_Password">{{labels["Password"]}}</label></td>
+            <td><input id="Search_Password" class="form-control" /></td>
+            <td><input type="radio" id="Search_item" value="2" name="Search_select_button" class="btn btn-md" /></td>
+        </tr>
+        <tr>
+            <td><label for="Search_Text">{{labels["Text"]}}</label></td>
+            <td><input id="Search_Text" class="form-control" /></td>
+            <td><input type="radio" id="Search_item" value="3" name="Search_select_button" class="btn btn-md" /></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td><input type="button" id='Search_button' :value="labels['Search']" class="btn btn-md" /></td>
+            <td></td>
+        </tr>
+    </table>
+    <table class="table table-condensed table-hover" class="searchData">
+        <tbody v-if="IsSearched" v-for="item in searched_data">
+            <tr class="active">
+                <td>{{labels["Address"]}}</td>
+                <td colspan=2><input readonly style="width:250px" onfocus="this.select()" :value="item[0]" class="btn btn-md" /></td>
+            </tr>
+            <tr class="active">
+                <td>{{labels["Account"]}}</td>
+                <td colspan=2><input readonly style="width:250px" onfocus="this.select()" :value="item[1]" class="btn btn-md" /></td>
+            </tr>
+            <tr class="danger">
+                <td>{{labels["Password"]}}</td>
+                <td><input readonly style="width:250px" onfocus="this.select()" :value="item[2]" class="btn btn-md" /></td>
+            </tr>
+            <tr class="active">
+                <td>{{labels["Date"]}}</td>
+                <td><input readonly style="width:250px" onfocus="this.select()" :value="item[3]" class="btn btn-md" /></td>
+            </tr>
+            <tr class="warning">
+                <td>{{labels["Text"]}}</td>
+                <td><input readonly style="width:250px" onfocus="this.select()" :value="item[4]" class="btn btn-md" /></td>
+            </tr>
+        </tbody>
+    </table>
+    <p align="center" v-show="IsSearched" style="float: center;">{{ labels["Search Time"] }}:{{ searched_date }}</p>
+    {% endraw %}
 </div>
 <script>
-	var s_vm = new Vue({
-		el: "#SearchBody",
-		data: {
-			labels: language_dict,
-			result_language: language_dict["__language"],
-			IsSearched: false,
-			searched_data: [[],],
-			searched_date: "",
-		}
-	})
-	vms.push(s_vm);
+    var s_vm = new Vue({
+        el: "#SearchBody",
+        data: {
+            labels: language_dict,
+            result_language: language_dict["__language"],
+            IsSearched: false,
+            searched_data: [
+                [],
+            ],
+            searched_date: "",
+        }
+    })
+    vms.push(s_vm);
 </script>
 {% endblock %}

@@ -7,17 +7,23 @@
     <script src='/static/js/vue.min.js'></script>
     <script src="/static/js/text.js"></script>
     <link href="/static/css/style.css" type="text/css" rel="stylesheet" />
+    <link href="/static/bootstrap/css/bootstrap.min.css" type="text/css" rel="stylesheet" />
+    <script src="/static/bootstrap/js/bootstrap.min.js"></script>
     <script>
         var vms = [];
+
         function getQueryVariable(variable) {
             var query = window.location.search.substring(1);
             var vars = query.split("&");
             for (var i = 0; i < vars.length; i++) {
                 var pair = vars[i].split("=");
-                if (pair[0] == variable) { return pair[1]; }
+                if (pair[0] == variable) {
+                    return pair[1];
+                }
             }
             return (false);
         }
+
         function changeLanguage(l) {
             switch (l) {
                 case "zh":
@@ -37,50 +43,53 @@
             language_dict = dict_en_us;
         }
     </script>
+    <style>
+        .baseBar {
+            width: 100%;
+            padding: 0.5em 0;
+        }
+        
+        .baseBar div {
+            display: inline-block;
+        }
+    </style>
     {% block head %}{% endblock %}
 </head>
 
 <body onload="updatever()">
-    <div id="NavBody">
+    <div id="NavBody" class="container">
         {% raw %}
-        <div id="Version-nav">
-            <div id="Version-label" style="width:45%;float:left;">
-                &emsp;&emsp;{{ labels["Version"] }}
+        <div id="Version-nav" class="col-md-12 baseBar">
+            <div class="col-md-2">
+                {{ labels["Version"] }}
             </div>
-            <div id="Version-choice" style="width:45%;float:left;">
-                <span id="ver"></span>
+            <div class="col-md-4 col-md-offset-4">
+                <input type="button" id="ver" class="btn btn-sm btn-success">
             </div>
         </div>
-        <br><br>
-        <div id="language-nav">
-            <div id="language-label" style="width:45%;float:left;">
-                <div id="language-label" style="width:45%;float:left;">
-                    &emsp;&emsp;{{labels["Language"]}}
-                </div>
+        <div id="language-nav" class="col-md-12 baseBar">
+            <div class="col-md-2">
+                {{labels["Language"]}}
             </div>
             {% endraw %}
-            <div id="language-choice" style="width:45%;float:left;">
-                <button onclick="changeLanguage('en')">English</button>&emsp;&emsp;<button
-                    onclick="changeLanguage('zh')">简体中文</button>
+            <div class="col-md-4 col-md-offset-4 btn-group btn-group-sm btn-toolbar" role="toolbar">
+                <div class="btn-group">
+                    <button onclick="changeLanguage('en')" class="btn btn-primary">English</button>
+                    <button onclick="changeLanguage('zh')" class="btn btn-primary">简体中文</button>
+                </div>
             </div>
         </div>
-        <br><br>
-        <div id="function-nav">
-            <div id="function-label" style="width:45%;float:left;">
-                {% raw %}
-                &emsp;&emsp;{{labels["Function"]}}
-                {% endraw %}
+        <div id="function-nav" class="col-md-12 baseBar">
+            <div class="col-md-2">
+                {% raw %} {{labels["Function"]}} {% endraw %}
             </div>
-            <div id="function-choice" style="width:45%;float:left;">
-                <a href="{{get_urls('index')}}">
-                    <button>{%raw%}{{labels["Generation"]}}{%endraw%}</button>
-                </a>&emsp;&emsp;
-                <a href="{{get_urls('search')}}"><button>{%raw%}{{labels["Search"]}}{%endraw%}</button></a>&emsp;&emsp;
-                <a href="{{get_urls('update')}}"><button>{%raw%}{{labels["Update"]}}{%endraw%}</button></a>&emsp;&emsp;
-                <a href="{{get_urls('Restore')}}"><button>{%raw%}{{labels["Restore"]}}{%endraw%}</button></a>
+            <div id="function-choice" class="col-md-9 col-md-offset-2 btn-group btn-group-sm">
+                <a href="{{get_urls('index')}}"><button class="btn btn-primary col-md-3">{%raw%}{{labels["Generation"]}}{%endraw%}</button></a>
+                <a href="{{get_urls('search')}}"><button class="btn btn-primary col-md-2">{%raw%}{{labels["Search"]}}{%endraw%}</button></a>
+                <a href="{{get_urls('update')}}"><button class="btn btn-primary col-md-2">{%raw%}{{labels["Update"]}}{%endraw%}</button></a>
+                <a href="{{get_urls('Restore')}}"><button class="btn btn-danger col-md-3">{%raw%}{{labels["Restore"]}}{%endraw%}</button></a>
             </div>
         </div>
-        <br><br>
     </div>
 
     <script>
