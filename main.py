@@ -46,7 +46,7 @@ def Pages(pagename: str):
                     change_db_file_name()
                 upload_db.save("Database.db")
                 del upload_db
-                return render_template("Restore.html", position="Restore", language=Language, Status="Uploaded file Success!", Date=str(time.strftime(r"%Y-%m-%d--%H-%M-%S")))
+                return render_template("Restore.html", position="Restore", language=Language, Status="Successfully Uploaded!", Date=str(time.strftime(r"%Y-%m-%d--%H-%M-%S")))
             else:
                 return render_template(PS.pageNames[pagename], language=Language, position=pagename)
         return render_template("index.html", language=Language)
