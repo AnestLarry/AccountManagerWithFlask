@@ -5,11 +5,11 @@
 
 [![LICENSE](https://img.shields.io/badge/License-Apache%20License%202.0-blue.svg)](LICENSE) [![codecov](https://codecov.io/gh/AnestLarry/AccountManagerWithFlask/branch/Ver_4.0.2/graph/badge.svg)](https://codecov.io/gh/AnestLarry/AccountManagerWithFlask)
 
-### Version 4.0.2
+### Version 4.1.0
 
-#### This ReadMe might not apply the new commits , please noticed the Version of ReadMe.
+#### This ReadMe might not apply the new commits, please noticed the Version of ReadMe.
 ### Description
-#### Account Manager With Flask , which is a web to generate and save your account and passswords. It can keep you from Leak privacy .Such as someone log your User's names,Accounts or passwords .
+#### Account Manager With Flask, which is a web to generate and save your account and passswords. It can keep you from Leak privacy .Such as someone log your User's names,Accounts or passwords.
 
 #### 0. Flask versionis not all same with Django version.
 
@@ -19,11 +19,11 @@
 ##### Explain : 
 1. "MyCode" Random Seed
 2. "sqltype" sql type ,only suppost "sqlite3" now
-##### Or you can use `run me at first.py` to finish your settings file.
-##### `run me at first.py` might useless in the new commit
+
+##### MyCode could get from `Tools/GetMyCode.py`
 
 #### 2. Get your Database file
-##### SQLite3: you can get the example database file By `Tools/GetInitDatabaseSqlite3.py` . Put your database file on the root. There is a test-data in it and you can search it with `test.com` or delete it by api with `1970-01-01--00-00-00--Thursday`.
+##### SQLite3: you can get the example database file By `Tools/GetInitDatabaseSqlite3.py`. Put your database file on the root. There is a test-data in it and you can search it with `test.com` or delete it by api with `1970-01-01--00-00-00--Thursday`.
 
 #### 3. Run
 ##### Windows:
@@ -39,3 +39,8 @@ port : which was need listened to(default 5000)
 ###### Explain:
 ip : which was need listened to(default 127.0.0.1)
 port : which was need listened to(default 5000)
+
+#### 4. GUI(win)
+##### Runtime: .NET 5
+##### IDE: VS2019
+double click `.exe` file you build with project. Just use it as web(it need `main.py` working). 
