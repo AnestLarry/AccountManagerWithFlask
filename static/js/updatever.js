@@ -1,3 +1,3 @@
 function updatever() {
-    document.getElementById("ver").innerHTML = "4.0.3";
+    document.getElementById("ver").value = "4.1.0";
 }

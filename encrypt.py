@@ -12,80 +12,89 @@ hexdigits = digits + 'abcdef' + 'ABCDEF'
 punctuation = r"""!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~"""
 printable = digits + ascii_letters + punctuation
 
-__r: Random = random.Random(
-    pjsetting.MyCode+time.strftime(r"%Y-%m-%d %H-%M-%S"))
+
+class EncryptRandom(object):
+    def __init__(self) -> None:
+        self.__r: Random = random.Random(
+            pjsetting.MyCode+time.strftime(r"%Y-%m-%d %H-%M-%S"))
+
+    def get_num(self) -> str:
+        return str(digits[self.__r.randrange(0, 10)])
+
+    def get_lowercase(self) -> str:
+        return ascii_lowercase[self.__r.randrange(0, 26)]
+
+    def get_uppercase(self) -> str:
+        return ascii_uppercase[self.__r.randrange(0, 26)]
+
+    def get_word(self) -> str:
+        return str(ascii_letters[self.__r.randrange(0, 52)])
+
+    def get_punctuation(self) -> str:
+        return punctuation[self.__r.randrange(0, 32)]
+
+    def get_all(self) -> str:
+        return printable[self.__r.randrange(0, 94)]
+
+    def randrange(self, i, j) -> int:
+        return self.__r.randrange(i, j)
 
 
-def __get_num() -> str: return str(digits[__r.randrange(0, 10)])
-
-
-def __get_lowercase() -> str: return ascii_lowercase[__r.randrange(0, 26)]
-
-
-def __get_uppercase() -> str: return ascii_uppercase[__r.randrange(0, 26)]
-
-
-def __get_word() -> str: return str(ascii_letters[__r.randrange(0, 52)])
-
-
-def __get_punctuation() -> str: return punctuation[__r.randrange(0, 32)]
-
-
-def __get_all() -> str: return printable[__r.randrange(0, 94)]
+er = EncryptRandom()
 
 
 def getAccount() -> str:
-    n: int = __r.randrange(7, 11)
-    AccountStr: str = __get_word()
+    n: int = er.randrange(7, 11)
+    AccountStr: str = er.get_word()
     for _ in range(n):
-        if __r.randrange(0, 2) < 1:
-            AccountStr += __get_word()
+        if er.randrange(0, 2) < 1:
+            AccountStr += er.get_word()
         else:
-            AccountStr += __get_num()
+            AccountStr += er.get_num()
     return AccountStr
 
 
 def __getPassword_1() -> str:
     result: str = ""
     for _ in range(6):
-        result += __get_num()
+        result += er.get_num()
     return result
 
 
 def __getPassword_2() -> str:
-    n: int = __r.randrange(8, 14)
+    n: int = er.randrange(8, 14)
     Password_NumAndWord_Str: str = ""
     for _ in range(n):
-        t: int = __r.randrange(0, 3)
+        t: int = er.randrange(0, 3)
         if t < 1:
-            Password_NumAndWord_Str += __get_lowercase()
+            Password_NumAndWord_Str += er.get_lowercase()
         elif t < 2:
-            Password_NumAndWord_Str += __get_num()
+            Password_NumAndWord_Str += er.get_num()
         else:
-            Password_NumAndWord_Str += __get_uppercase()
+            Password_NumAndWord_Str += er.get_uppercase()
     return Password_NumAndWord_Str
 
 
 def __getPassword_3() -> str:
     Password3_Str: str = ""
     for _ in range(10):
-        if __r.randrange(0, 2) < 1:
-            Password3_Str += __get_word()
+        if er.randrange(0, 2) < 1:
+            Password3_Str += er.get_word()
         else:
-            Password3_Str += __get_num()
-    return Password3_Str+__get_punctuation()
+            Password3_Str += er.get_num()
+    return Password3_Str+er.get_punctuation()
 
 
 def __getPassword_max() -> str:
-    password_list: list = [__get_num()] + [__get_num()] + \
-        [__get_lowercase()] + [__get_lowercase()] + \
-        [__get_uppercase()] + [__get_uppercase()] + \
-        [__get_word()] + [__get_word()] + \
-        [__get_punctuation()] + [__get_punctuation()] + \
-        [__get_all()] + [__get_all()]
+    password_list: list = [er.get_num()] + [er.get_num()] + \
+        [er.get_lowercase()] + [er.get_lowercase()] + \
+        [er.get_uppercase()] + [er.get_uppercase()] + \
+        [er.get_word()] + [er.get_word()] + \
+        [er.get_punctuation()] + [er.get_punctuation()] + \
+        [er.get_all()] + [er.get_all()]
     for _ in range(8):
         if random.choice([True, False]):
-            password_list += [__get_all()]
+            password_list += [er.get_all()]
     result_password: str = ""
     for _ in range(len(password_list)):
         result_password += password_list.pop(

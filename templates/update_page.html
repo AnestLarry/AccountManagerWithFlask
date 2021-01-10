@@ -1,57 +1,50 @@
-<html>
-{% include "nav.html" %}
-	<div id="UpdateBody">
-		<script>
-			$(document).ready(function(){
-					$("#Update_button").click(function(){
-						Update_Item( $("#Update_Date").val() , $("#Update_Text").val())
-					})
-				})
-			function Update_Item(Date,Text){
-				$.post("{{ get_urls('Update_Text') }}",{
-					DateStr:Date,
-					TextStr:Text
-				},function(data){
-					alert(u_vm.alert_text);
-				})
-			}
-			</script>
-		<hr>
-		{% raw %}
-		<p align="center">Update Text</p>
-		<hr>
-		<div id="Update">
-			<div id="update-label-date" style="width:45%;float:left;">
-				&emsp;&emsp;Date
-			</div>
-			<div id="update-choice-date" style="width:45%;float:left;">
-					<input id="Update_Date" />
-			</div>
-			<br><br>
-			<div id="update-label-text" style="width:45%;float:left;">
-				&emsp;&emsp;Text
-			</div>
-			<div id="update-choice-text" style="width:45%;float:left;">
-					<input id="Update_Text" />
-			</div>
-		</div>
-		<br>
-		<p align="center"><input type="button" id='Update_button' value="Update"/></p>
-		{% endraw %}
-	</div>
-	<script>
-	var u_vm = new Vue({
-		el:"#UpdateBody",
-		data:{
-			{% if language=="zh" %}
-			labels:["更新标注", "日期", "标注","更新"],
-			alert_text:"成功",
-			{% else %}
-			labels:["Update Text", "Date", "Text", "Update"],
-			alert_text:"Succ",
-			{% endif %}
-		}
-	})
-	</script>
-</body>
-</html>
+{% extends "base.html" %} {% block body %}
+<div id="UpdateBody">
+    <script>
+        $(document).ready(function() {
+            $("#Update_button").click(function() {
+                Update_Item($("#Update_Date").val(), $("#Update_Text").val())
+            })
+        })
+
+        function Update_Item(Date, Text) {
+            $.post("{{ get_urls('Update_Text') }}", {
+                DateStr: Date,
+                TextStr: Text
+            }, function(data) {
+                alert(u_vm.alert_text);
+            })
+        }
+    </script>
+    {% raw %}
+    <table class="table table-condensed">
+        <tr>
+            <td colspan=5>{{labels["Update Text"]}}</td>
+        </tr>
+        <tr>
+            <td colspan=2><label for="Update_Date">{{labels["Date"]}}</label></td>
+            <td colspan=3><input id="Update_Date" class="form-control" /></td>
+        </tr>
+        <tr>
+            <td colspan=2><label for="Update_Text">{{labels["Text"]}}</label></td>
+            <td colspan=3><input id="Update_Text" class="form-control" /></td>
+        </tr>
+        <tr>
+            <td colspan=2></td>
+            <td><input type="button" id='Update_button' :value="labels['Update']" class="btn btn-md" /></td>
+            <td colspan=2></td>
+        </tr>
+    </table>
+    {% endraw %}
+</div>
+<script>
+    var u_vm = new Vue({
+        el: "#UpdateBody",
+        data: {
+            labels: language_dict,
+            alert_text: language_dict["Succ"],
+        }
+    })
+    vms.push(u_vm);
+</script>
+{% endblock %}

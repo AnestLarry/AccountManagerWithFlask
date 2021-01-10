@@ -5,12 +5,20 @@ import time
 
 class manage_sql:
     def __init__(self, file: str = "Database.db"):
-        self.__conn = sqlite3.connect('Database.db')
+        self.__conn = sqlite3.connect(file)
         self.__c = self.__conn.cursor()
 
     def Save_Result_to_sql(self, AddressStr: str, AccountStr: str, password: str, Text: str) -> bool:
-        self.__c.execute('insert into Data values(?,?,?,?,?);', (AddressStr, AccountStr,
-                                                                 password, base64.b64encode(time.strftime(r"%Y-%m-%d--%H-%M-%S--%A").encode()).decode(), Text))
+        self.__c.execute("insert into Data values(?,?,?,?,?);", (
+            AddressStr,
+            AccountStr,
+            password,
+            base64.b64encode(
+                time.strftime(r"%Y-%m-%d--%H-%M-%S--%A").encode()
+            ).decode(),
+            Text,
+        )
+        )
         self.__conn.commit()
         return True
 

@@ -46,10 +46,7 @@ def Pages(pagename: str):
                     change_db_file_name()
                 upload_db.save("Database.db")
                 del upload_db
-                if Language == "zh":
-                    return render_template("Restore.html", position="Restore", language=Language, Status="上传文件成功!", Date=str(time.strftime(r"%Y-%m-%d--%H-%M-%S")))
-                else:
-                    return render_template("Restore.html", position="Restore", language=Language, Status="Uploaded file Success!", Date=str(time.strftime(r"%Y-%m-%d--%H-%M-%S")))
+                return render_template("Restore.html", position="Restore", language=Language, Status="Successfully Uploaded!", Date=str(time.strftime(r"%Y-%m-%d--%H-%M-%S")))
             else:
                 return render_template(PS.pageNames[pagename], language=Language, position=pagename)
         return render_template("index.html", language=Language)
@@ -100,7 +97,7 @@ def Save_Result_to_sql():
 @app.route("/Search_item", methods=["POST"])
 def Search_item():
     try:
-        if request.form['key'] and request.form["keyword"]:
+        if request.form.get("key", "") and request.form.get("keyword", ""):
             keyword = base64.b64encode(
                 request.form["keyword"].encode()).decode()
             key: str = request.form['key']
@@ -119,6 +116,8 @@ def Search_item():
                 KeyMode_Str, keyword) + [[time.strftime("%Y-%m-%d-%H-%M-%S")]]
             del sql
             return json.dumps(result), 200
+        else:
+            return json.dumps({"code": "500", "message": "argv error"}), 500
     except IOError:
         return "400 Bad Request 2", 400
 
@@ -145,7 +144,6 @@ def Delete(Date: str):
     try:
         if Date:
             Date = base64.b64encode(Date.encode()).decode()
-
             sql = manage_sql()
             log.warning(sql.Delete_Item(Date))
             del sql
@@ -159,8 +157,7 @@ def Backup():
     log.critical("Backup is Downloaded! Downloader's ip { %s } " % (
         request.remote_addr,))
     sql = manage_sql()
-    return Response(sql.Backup_Database(), mimetype="application/octet-stream", headers={"Content-Type": "application/octet-stream", "Content-disposition":
-                                                                                         "attachment; filename="+str(time.strftime(r"%Y-%m-%d--%H-%M-%S")+".db")})
+    return Response(sql.Backup_Database(), mimetype="application/octet-stream", headers={"Content-Type": "application/octet-stream", "Content-disposition": "attachment; filename="+str(time.strftime(r"%Y-%m-%d--%H-%M-%S")+".db")})
 
 
 @app.route("/static/<folder>/<filename>")
@@ -179,7 +176,10 @@ def staticfile(folder: str, filename: str):
                 while data:
                     data = f.read(1024*1)
                     yield data
-        return Response(getfiledata(), mimetype=responses[folder]["mimetype"]["value"], headers=responses[folder]["headers"])
+        resp = Response(getfiledata(
+        ), mimetype=responses[folder]["mimetype"]["value"], headers=responses[folder]["headers"])
+        resp.headers["cache-control"] = "max-age=3600;"
+        return resp
     else:
         return "404 Page Not Found.", 404
 
