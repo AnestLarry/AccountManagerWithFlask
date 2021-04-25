@@ -78,7 +78,7 @@ def Save_Result_to_sql():
             except:
                 AddressStr: str = "Tm9BZGRyZXNz"  # NoAddress
             try:
-                Text: str = request.form["Text"].decode()
+                Text: str = request.form["Text"]
             except:
                 Text: str = "NoValue"  # NoValue
             AccountStr, Password = base64.b64encode(request.form['AccountStr'].encode(
