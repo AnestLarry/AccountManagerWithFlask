@@ -8,7 +8,6 @@ ascii_lowercase = 'abcdefghijklmnopqrstuvwxyz'
 ascii_uppercase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 ascii_letters = ascii_lowercase + ascii_uppercase
 digits = '0123456789'
-hexdigits = digits + 'abcdef' + 'ABCDEF'
 punctuation = r"""!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~"""
 printable = digits + ascii_letters + punctuation
 
@@ -95,10 +94,8 @@ def __getPassword_max() -> str:
     for _ in range(8):
         if random.choice([True, False]):
             password_list += [er.get_all()]
-    result_password: str = ""
-    for _ in range(len(password_list)):
-        result_password += password_list.pop(
-            random.randint(0, len(password_list)-1))
+    random.shuffle(password_list)
+    result_password: str = "".join(password_list)
     return result_password
 
 
